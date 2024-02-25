@@ -34,6 +34,10 @@ begin
 		rst_i <= '1';
 		wait for 100 ms;
 		rst_i <= '0';
+		wait for 270 ms;
+		rst_i <= '1';
+		wait for 50 ms;
+		rst_i <= '0';
 		wait;
 	end process;
 
