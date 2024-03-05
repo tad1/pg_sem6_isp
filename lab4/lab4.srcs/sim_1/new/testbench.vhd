@@ -59,6 +59,10 @@ begin
 			RXD <= transmission(i);
 			wait for 108.32 us; -- 1/9600 * 1.04 sec
 		end loop;
+		for i in nbits-1 downto 0 loop
+			RXD <= transmission(i);
+			wait for 145.82 us; -- 1/9600 * 1.40 sec
+		end loop;
 		wait;
 	end process;
 

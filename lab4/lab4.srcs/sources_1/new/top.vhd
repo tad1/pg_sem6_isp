@@ -76,7 +76,7 @@ signal disp_seg : STD_LOGIC_VECTOR(31 downto 0) := x"FFFFFFFF";
 begin
 	
 	uar_clkc: clk_div Generic map(
-		divisior => 652*2
+		divisior => 652*2 -- `*2` is required by legacy implementation
 	) Port map(
 		clk_i => clk_i,
 		rst_i => '0',
