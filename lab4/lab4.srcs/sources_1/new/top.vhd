@@ -37,6 +37,7 @@ architecture Behavioral of top is
 			sampling_rate: integer
 		); Port (
 			clk_i : in STD_LOGIC;
+			rst_i : in STD_LOGIC;
 			RXD_i : in STD_LOGIC;
 			ready_o: out STD_LOGIC;
 			data_o: out STD_LOGIC_VECTOR(data_n-1 downto 0));
@@ -76,10 +77,10 @@ signal disp_seg : STD_LOGIC_VECTOR(31 downto 0) := x"FFFFFFFF";
 begin
 	
 	uar_clkc: clk_div Generic map(
-		divisior => 652*2 -- `*2` is required by legacy implementation
+		divisior => 652
 	) Port map(
 		clk_i => clk_i,
-		rst_i => '0',
+		rst_i => rst_i,
 		clk_o => uar_clk
 	);
 	
@@ -88,6 +89,7 @@ begin
 		sampling_rate => 16
 	) Port map (
 		clk_i => uar_clk,
+		rst_i => rst_i,
 		RXD_i => RXD_i,
 		ready_o => ready,
 		data_o => uar_data
@@ -113,6 +115,10 @@ begin
 		hex_i => latch_data(7 downto 4),
 		seg_o => disp_seg(15 downto 8)
 	);
+	
+	process(rst_i) is
+	begin
+	end process;
 	
 	process(ready) is
 	begin
