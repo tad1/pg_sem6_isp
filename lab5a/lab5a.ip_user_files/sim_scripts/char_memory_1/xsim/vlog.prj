@@ -1,0 +1,6 @@
+verilog xil_defaultlib  \
+"../../../../lab5a.srcs/sources_1/ip/char_memory_1/sim/char_memory.v" \
+
+verilog xil_defaultlib "glbl.v"
+
+nosort
