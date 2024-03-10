@@ -109,6 +109,7 @@ architecture Behavioral of top is
 	           send_i : in STD_LOGIC);
 	end component;
 
+signal prev_clk : STD_LOGIC := '0';
 signal uar_clk : STD_LOGIC := '0';
 signal uat_clk : STD_LOGIC := '0';
 
@@ -318,7 +319,7 @@ if (ready_to_send = '1' or fifo_full = '1') and sender_state = accept then
 	sender_state <= load_symbols;
 end if;
 
-if sender_state = load_symbols and rising_edge(clk_i) then
+if sender_state = load_symbols and (clk_i = '1' and prev_clk = '0') then
 	if load_state = request then
 		fifo_rd_sig <= not fifo_rd_sig;
 		load_state := read;
@@ -345,9 +346,10 @@ if ready = '1' and p_ready = '0' then
 	end if;
 end if;
 p_ready <= ready;
+prev_clk <= clk_i;
 end process;
 
 ld1 <= '1' when sender_state = accept else '0';
-ld2 <= uat_sig;
+ld2 <= fifo_wr_sig;
 
 end Behavioral;
