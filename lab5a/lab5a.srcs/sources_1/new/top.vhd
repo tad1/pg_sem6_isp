@@ -218,12 +218,12 @@ begin
 	-- NOTE: is recieves good information
 	-- but it probaly don't show overflow at all, is it at all stored in fifo??
 	hexc1: hex2seg Port map(
-		hex_i => uar_data(3 downto 0),
+		hex_i => fifo_rd_data(3 downto 0),
 		seg_o => disp_seg(7 downto 0)
 	);
 	
 	hexc2: hex2seg Port map(
-		hex_i => uar_data(7 downto 4),
+		hex_i => fifo_rd_data(7 downto 4),
 		seg_o => disp_seg(15 downto 8)
 	);
 	
@@ -350,20 +350,11 @@ if ready = '1' then
 elsif recieved = '1' then
 	recieved <= '0';
 end if;
-
-
-
-if load_state = request then
-	ld2 <= '1'; -- this gets tirggered!
-else
-	ld2 <= '0';
-end if;
-
 end process;
 
 ld0 <= '1' when sender_state = load_symbols else '0';
 ld1 <= '1' when sender_state = send else '0'; -- this gets triggered!
-
+ld2 <= fifo_rd_pulse;
 
 --ld0 <= fifo_full;
 --ld1 <= '1' when sender_state = accept else '0';
