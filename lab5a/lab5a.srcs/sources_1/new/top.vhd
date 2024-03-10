@@ -109,12 +109,11 @@ architecture Behavioral of top is
 	           send_i : in STD_LOGIC);
 	end component;
 
-signal prev_clk : STD_LOGIC := '0';
 signal uar_clk : STD_LOGIC := '0';
 signal uat_clk : STD_LOGIC := '0';
 
 signal ready : STD_LOGIC := '0';
-signal p_ready : STD_LOGIC := '0';
+signal recieved : STD_LOGIC := '0';
 signal uar_data : STD_LOGIC_VECTOR(7 downto 0);
 signal uat_send_data : STD_LOGIC_VECTOR(7 downto 0);
 signal disp_seg : STD_LOGIC_VECTOR(31 downto 0) := x"FFFFFFFF";
@@ -318,7 +317,22 @@ if (ready_to_send = '1' or fifo_full = '1') and sender_state = accept then
 	sender_state <= load_symbols;
 end if;
 
-if sender_state = load_symbols and (clk_i = '1' and prev_clk = '0') then
+
+if ready = '1' then -- todo: check if we get to this loop and why not
+	if fifo_full = '0' and recieved = '0' then
+		if uar_data = 13 and sender_state = accept then -- ignore ENTER while printing out
+			ready_to_send <= '1';
+		elsif uar_data /= 13 then
+			n_chars <= n_chars + 1; 
+			fifo_wr_sig <= not fifo_wr_sig;
+		end if;
+		recieved <= '1';
+	end if;
+elsif recieved = '1' then
+	recieved <= '0';
+end if;
+
+if sender_state = load_symbols and rising_edge(clk_i) then
 	if load_state = request then
 		fifo_rd_sig <= not fifo_rd_sig;
 		load_state := read;
@@ -333,23 +347,10 @@ if sender_state = load_symbols and (clk_i = '1' and prev_clk = '0') then
 	end if;
 end if;
 
-
-if ready = '1' and p_ready = '0' then -- todo: check if we get to this loop and why not
-	if fifo_full = '0' then
-		if uar_data = 13 and sender_state = accept then -- ignore ENTER while printing out
-			ready_to_send <= '1';
-		elsif uar_data /= 13 then
-			n_chars <= n_chars + 1; 
-			fifo_wr_sig <= not fifo_wr_sig;
-		end if;
-	end if;
-end if;
-p_ready <= ready;
-prev_clk <= clk_i;
 end process;
 
-ld0 <= '1' when (ready = '1' and p_ready = '0') else '0';
-ld1 <= '1' when fifo_full = '0' else '0';
+ld0 <= ready;
+ld1 <= '1' when fifo_full = '0' and recieved = '0' else '0';
 ld2 <= '1' when uar_data /= 13 else '0';
 
 
