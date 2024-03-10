@@ -27,9 +27,9 @@ entity top is
     Port ( clk_i : in STD_LOGIC;
            RXD_i : in STD_LOGIC;
            TXD_o : out STD_LOGIC;
-           ld0 : out STD_LOGIC;
-           ld1 : out STD_LOGIC;
-           ld2 : out STD_LOGIC;
+           ld0 : out STD_LOGIC := '0';
+           ld1 : out STD_LOGIC := '0';
+           ld2 : out STD_LOGIC := '0';
            led7_an_o : out STD_LOGIC_VECTOR (3 downto 0);
            led7_seg_o : out STD_LOGIC_VECTOR (7 downto 0));
 end top;
@@ -335,13 +335,10 @@ end if;
 
 
 if ready = '1' and p_ready = '0' then -- todo: check if we get to this loop and why not
-	ld0 <= '1';
 	if fifo_full = '0' then
-		ld1 <= '1';
 		if uar_data = 13 and sender_state = accept then -- ignore ENTER while printing out
 			ready_to_send <= '1';
 		elsif uar_data /= 13 then
-			ld2 <= '1';
 			n_chars <= n_chars + 1; 
 			fifo_wr_sig <= not fifo_wr_sig;
 		end if;
@@ -350,6 +347,11 @@ end if;
 p_ready <= ready;
 prev_clk <= clk_i;
 end process;
+
+ld0 <= '1' when (ready = '1' and p_ready = '0') else '0';
+ld1 <= '1' when fifo_full = '0' else '0';
+ld2 <= '1' when uar_data /= 13 else '0';
+
 
 --ld0 <= fifo_full;
 --ld1 <= '1' when sender_state = accept else '0';
