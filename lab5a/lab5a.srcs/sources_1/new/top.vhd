@@ -214,6 +214,8 @@ begin
 		led7_seg_o => led7_seg_o
 	);
 	
+	-- NOTE: is recieves good information
+	-- but it probaly don't show overflow at all, is it at all stored in fifo??
 	hexc1: hex2seg Port map(
 		hex_i => uar_data(3 downto 0),
 		seg_o => disp_seg(7 downto 0)

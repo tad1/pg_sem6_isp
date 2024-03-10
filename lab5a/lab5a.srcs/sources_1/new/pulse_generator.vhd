@@ -39,15 +39,22 @@ end pulse_generator;
 
 architecture Behavioral of pulse_generator is
 signal prev_sig : STD_LOGIC := '0';
+signal prev_clk : STD_LOGIC := '0';
+signal flag : STD_LOGIC := '0';
 begin
 	
 	process(signal_i, clk) is
 	begin
 		if signal_i /= prev_sig then
 			pulse_o <= '1';
-		elsif rising_edge(clk) then
+			flag <= '0';
+		elsif clk = '1' and prev_clk = '0' then
+			flag <= '1';
+		elsif clk = '0' and prev_clk = '1' then
+			flag <= '0';
 			pulse_o <= '0';
 		end if;
+		prev_clk <= clk;
 		prev_sig <= signal_i;
 	end process;
 
