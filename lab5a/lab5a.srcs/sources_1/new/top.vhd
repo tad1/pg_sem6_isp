@@ -25,7 +25,6 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity top is
     Port ( clk_i : in STD_LOGIC;
-           rst_i : in STD_LOGIC := '0';
            RXD_i : in STD_LOGIC;
            TXD_o : out STD_LOGIC;
            ld0 : out STD_LOGIC;
@@ -112,6 +111,7 @@ signal uar_clk : STD_LOGIC := '0';
 signal uat_clk : STD_LOGIC := '0';
 
 signal ready : STD_LOGIC := '0';
+signal p_ready : STD_LOGIC := '0';
 signal uar_data : STD_LOGIC_VECTOR(7 downto 0);
 signal uat_send_data : STD_LOGIC_VECTOR(7 downto 0);
 signal disp_seg : STD_LOGIC_VECTOR(31 downto 0) := x"FFFFFFFF";
@@ -176,11 +176,19 @@ begin
 	);
 	
 	
+	uat_clkc: clk_div Generic map(
+			divisior => 10416
+		) Port map(
+			clk_i => clk_i,
+			rst_i => '0',
+			clk_o => uat_clk
+		);
+	
 	uar_clkc: clk_div Generic map(
 		divisior => 652
 	) Port map(
 		clk_i => clk_i,
-		rst_i => rst_i,
+		rst_i => '0',
 		clk_o => uar_clk
 	);
 	
@@ -189,7 +197,7 @@ begin
 		sampling_rate => 16
 	) Port map (
 		clk_i => uar_clk,
-		rst_i => rst_i,
+		rst_i => '0',
 		RXD_i => RXD_i,
 		ready_o => ready,
 		data_o => uar_data
@@ -271,7 +279,7 @@ if sender_state = send and uat_busy = '0' then
 					sym_no := sym_no + 1;
 				else
 					sym_no := 0;
-					if char_no + 1 < max_chars then
+					if char_no + 1 < n_buf_chars then
 						char_no := char_no + 1;
 						local_state := load_character;
 					else
@@ -322,9 +330,9 @@ if sender_state = load_symbols and rising_edge(clk_i) then
 end if;
 
 
-if rising_edge(ready) then
+if ready = '1' and p_ready = '0' then
 	if fifo_full /= '1' then
-		if uar_data = 13 and sender_state /= accept then -- ignore ENTER while printing out
+		if uar_data = 13 and sender_state = accept then -- ignore ENTER while printing out
 			ready_to_send <= '1';
 		elsif uar_data /= 13 then
 			n_chars <= n_chars + 1; 
@@ -332,6 +340,7 @@ if rising_edge(ready) then
 		end if;
 	end if;
 end if;
+p_ready <= ready;
 end process;
 
 end Behavioral;
