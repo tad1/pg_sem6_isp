@@ -310,9 +310,27 @@ if sender_state = send and uat_busy = '0' then
 		end case;
 end if;	
 
+if sender_state = load_symbols then
+	n_chars <= 0;
+
+	if load_state = request then
+		fifo_rd_sig <= not fifo_rd_sig;
+		load_state := read;
+	else
+		letters(letter_i) <= fifo_rd_data;
+		load_state := request;
+		
+		if letter_i + 1 < n_buf_chars then
+			letter_i := letter_i + 1;
+		else
+			letter_i := 0;
+			sender_state <= send;
+		end if;
+	end if;
+end if;
+
 if (ready_to_send = '1' or fifo_full = '1') and sender_state = accept then
 	n_buf_chars <= n_chars;
-	n_chars <= 0;
 	ready_to_send <= '0';
 	letter_i := 0;
 	sender_state <= load_symbols;
@@ -333,20 +351,7 @@ elsif recieved = '1' then
 	recieved <= '0';
 end if;
 
-if sender_state = load_symbols then
-	if load_state = request then
-		fifo_rd_sig <= not fifo_rd_sig;
-		load_state := read;
-	else
-		letters(letter_i) <= fifo_rd_data;
-		load_state := request;
-		letter_i := letter_i + 1;
-		
-		if letter_i >= n_buf_chars then
-			sender_state <= send;
-		end if;
-	end if;
-end if;
+
 
 if load_state = request then
 	ld2 <= '1'; -- this gets tirggered!
