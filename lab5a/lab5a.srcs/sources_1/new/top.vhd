@@ -349,9 +349,9 @@ end if;
 
 end process;
 
-ld0 <= ready;
-ld1 <= '1' when fifo_full = '0' and recieved = '0' else '0';
-ld2 <= '1' when uar_data /= 13 else '0';
+ld0 <= fifo_wr_sig;
+ld1 <= fifo_rd_sig;
+ld2 <= uat_sig;
 
 
 --ld0 <= fifo_full;
