@@ -247,7 +247,7 @@ begin
 
 
 -- I need to put everything here.. damn
-process (clk_i) 
+process 
 variable letter_i: integer := 0;
 type LoadState is (request, read);
 variable load_state : LoadState := request;
@@ -259,6 +259,7 @@ type SendState is (load_character, send_character, send_CR, send_LF);
 variable local_state : SendState := load_character;
 begin
 
+wait until rising_edge(clk_i);
 if sender_state = send and uat_busy = '0' then
 		case local_state is
 			when load_character =>
