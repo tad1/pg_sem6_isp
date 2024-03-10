@@ -318,13 +318,13 @@ if (ready_to_send = '1' or fifo_full = '1') and sender_state = accept then
 end if;
 
 
-if ready = '1' then -- todo: check if we get to this loop and why not
+if ready = '1' then
 	if fifo_full = '0' and recieved = '0' then
 		if uar_data = 13 and sender_state = accept then -- ignore ENTER while printing out
 			ready_to_send <= '1';
 		elsif uar_data /= 13 then
 			n_chars <= n_chars + 1; 
-			fifo_wr_sig <= not fifo_wr_sig;
+			fifo_wr_sig <= not fifo_wr_sig; -- todo: somehow this is set only once, and gets reset when I hit enter..
 		end if;
 		recieved <= '1';
 	end if;
@@ -349,9 +349,9 @@ end if;
 
 end process;
 
-ld0 <= fifo_wr_sig;
-ld1 <= fifo_rd_sig;
-ld2 <= uat_sig;
+ld0 <= '1' when recieved = '0' else '0';
+ld1 <= fifo_wr_sig;
+ld2 <= ready_to_send;
 
 
 --ld0 <= fifo_full;
