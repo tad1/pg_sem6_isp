@@ -130,23 +130,23 @@ signal uat_sig : STD_LOGIC := '0';
 signal uat_pulse : STD_LOGIC := '0';
 signal uat_busy : STD_LOGIC := '1';
 
-signal n_chars : integer range 0 to 18 := 0;
-signal n_buf_chars : integer range 0 to 18 := 0;
+type SenderState is (accept, ld_req, ld_wait, ld_rec, sd_req, sd_wait, sd_send, sd_CR, sd_LF);
+signal current_state : SenderState := accept;
 
-type SenderState is (accept, load_symbols, send);
-signal sender_state : SenderState := accept;
-
-type l_Array is array (0 to 18) of STD_LOGIC_VECTOR(7 downto 0);
-signal letters : l_Array := (others => "00000000");
 signal rom_addr : STD_LOGIC_VECTOR(11 downto 0);
 signal rom_result : STD_LOGIC_VECTOR(7 downto 0);
 
 signal ready_to_send : STD_LOGIC := '0';
 
+type l_Array is array (0 to 17) of STD_LOGIC_VECTOR(7 downto 0);
+signal letters : l_Array := (others => "00000000");
+
+signal n_buff_chars : integer := 0;
+signal n_chars : integer := 0;
+
 constant character_width : integer := 8;
 constant character_height : integer := 16;
 constant max_chars : integer := 18;
-
 
 begin
 
@@ -247,100 +247,19 @@ begin
 
 
 -- I need to put everything here.. damn
-process 
-variable letter_i: integer := 0;
-type LoadState is (request, read);
-variable load_state : LoadState := request;
-
-variable line_no : integer := 0;
-variable char_no : integer := 0;
-variable sym_no : integer := 0;
-type SendState is (load_character, send_character, send_CR, send_LF);
-variable local_state : SendState := load_character;
+process
+	variable reading_letter : integer := 0;
+	variable send_char_no : integer := 0;
+	variable line_no : integer := 0;
+	variable pixel_no : integer := 0;
 begin
 
 wait until rising_edge(clk_i);
-if sender_state = send and uat_busy = '0' then
-		case local_state is
-			when load_character =>
-				rom_addr <= letters(char_no) & std_logic_vector(to_unsigned(line_no, 4));
-				local_state := send_character;
-			when send_character =>
-				-- decide on what character should be send
-				if rom_result(sym_no) = '1' then
-					if (unsigned(letters(char_no)) < 32) or (127 < unsigned(letters(char_no))) then
-						uat_send_data <= std_logic_vector(to_unsigned(character'pos('*'), 8));
-					else
-						uat_send_data <= letters(char_no);
-					end if;
-				else
-					uat_send_data <= std_logic_vector(to_unsigned(character'pos(' '), 8));
-				end if;
-				
-				uat_sig <= not uat_sig;
-				
-				if sym_no + 1 < character_width then
-					sym_no := sym_no + 1;
-				else
-					sym_no := 0;
-					if char_no + 1 < n_buf_chars then
-						char_no := char_no + 1;
-						local_state := load_character;
-					else
-						char_no := 0;
-						local_state := send_CR;
-					end if;
-				end if;
-				
-				
-			when send_CR =>
-				uat_send_data <= std_logic_vector(to_unsigned(13, 8));
-				uat_sig <= not uat_sig;
-				local_state := send_LF;
-			when send_LF =>
-				uat_send_data <= std_logic_vector(to_unsigned(10, 8));
-				uat_sig <= not uat_sig;
-				local_state := load_character;
-				
-				if line_no + 1 < character_height then
-					line_no := line_no + 1;
-				else
-					line_no := 0;
-					sender_state <= accept;
-				end if;
-		end case;
-end if;	
 
-if sender_state = load_symbols then
-	n_chars <= 0;
-
-	if load_state = request then
-		fifo_rd_sig <= not fifo_rd_sig;
-		load_state := read;
-	else
-		letters(letter_i) <= fifo_rd_data;
-		load_state := request;
-		
-		if letter_i + 1 < n_buf_chars then
-			letter_i := letter_i + 1;
-		else
-			letter_i := 0;
-			sender_state <= send;
-		end if;
-	end if;
-end if;
-
-if (ready_to_send = '1' or fifo_full = '1') and sender_state = accept then
-	n_buf_chars <= n_chars;
-	ready_to_send <= '0';
-	letter_i := 0;
-	sender_state <= load_symbols;
-end if;
-
-
+-- handle recieving
 if ready = '1' then
 	if fifo_full = '0' and recieved = '0' then
-		if uar_data = 13 and sender_state = accept then -- ignore ENTER while printing out
+		if uar_data = 13 and current_state = accept then -- ignore ENTER while printing out
 			ready_to_send <= '1';
 		elsif uar_data /= 13 then
 			n_chars <= n_chars + 1; 
@@ -351,14 +270,85 @@ if ready = '1' then
 elsif recieved = '1' then
 	recieved <= '0';
 end if;
+
+
+case current_state is
+	when accept =>
+		if fifo_full = '1' or ready_to_send = '1' then
+			n_buff_chars <= n_chars;
+			n_chars <= 0;
+			ready_to_send <= '0';
+			reading_letter := 0;
+			current_state <= ld_req;
+		end if;
+	when ld_req =>
+		fifo_rd_sig <= not fifo_rd_sig;
+		current_state <= ld_wait;
+	when ld_wait =>
+		current_state <= ld_rec;
+	when ld_rec =>
+		letters(reading_letter) <= fifo_rd_data;
+		if reading_letter + 1 < n_buff_chars then
+			reading_letter := reading_letter + 1;
+			current_state <= ld_req;
+		else
+			current_state <= sd_req;
+		end if;
+	
+	when sd_req =>
+		rom_addr <= letters(send_char_no) & std_logic_vector(to_unsigned(line_no, 4));
+		current_state <= sd_wait;
+	when sd_wait =>
+		if uat_busy = '0' then
+			current_state <= sd_send;
+		end if;
+	when sd_send =>
+		if rom_result(pixel_no) = '1' then
+			if (unsigned(letters(send_char_no)) < 32) or (127 < unsigned(letters(send_char_no))) then
+				uat_send_data <= std_logic_vector(to_unsigned(character'pos('*'), 8));
+			else
+				uat_send_data <= letters(send_char_no);
+			end if;
+		else
+			uat_send_data <= std_logic_vector(to_unsigned(character'pos(' '), 8));
+		end if;
+			
+		uat_sig <= not uat_sig;
+			
+		if pixel_no + 1 < character_width then
+			pixel_no := pixel_no + 1;
+		else
+			pixel_no := 0;
+			if send_char_no + 1 < n_buff_chars then
+				send_char_no := send_char_no + 1;
+				current_state <= sd_req;
+			else
+				send_char_no := 0;
+				current_state <= sd_CR;
+			end if;
+		end if;
+	when sd_CR =>
+		if uat_busy = '0' then
+			uat_send_data <= std_logic_vector(to_unsigned(13, 8));
+			uat_sig <= not uat_sig;
+			current_state <= sd_LF;
+		end if;
+	when sd_LF =>
+		if uat_busy = '0' then
+			uat_send_data <= std_logic_vector(to_unsigned(10, 8));
+			uat_sig <= not uat_sig;
+			current_state <= sd_req;
+			
+			if line_no + 1 < character_height then
+				line_no := line_no + 1;
+			else
+				line_no := 0;
+				current_state <= accept;
+			end if;
+		end if;
+
+end case;
+
 end process;
-
-ld0 <= ready_to_send;
-ld1 <= recieved; -- this gets triggered!
-ld2 <= '1' when sender_state /= accept else '0';
-
---ld0 <= fifo_full;
---ld1 <= '1' when sender_state = accept else '0';
---ld2 <= p_ready; -- TODO: this is never changing
 
 end Behavioral;
