@@ -162,7 +162,7 @@ begin
 	);
 	
 	uat_pulsec: pulse_generator Port map(
-		clk => uar_clk,
+		clk => uat_clk,
 		signal_i => uat_sig,
 		pulse_o => uat_pulse
 	);
