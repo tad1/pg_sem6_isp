@@ -150,7 +150,6 @@ constant max_chars : integer := 18;
 
 
 begin
-	ld0 <= fifo_full;
 
 	fifo_pulsec1: pulse_generator Port map(
 		clk => clk_i,
@@ -335,8 +334,8 @@ if sender_state = load_symbols and (clk_i = '1' and prev_clk = '0') then
 end if;
 
 
-if ready = '1' and p_ready = '0' then
-	if fifo_full /= '1' then
+if ready = '1' and p_ready = '0' then -- todo: check if we get to this loop and why not
+	if fifo_full = '0' then
 		if uar_data = 13 and sender_state = accept then -- ignore ENTER while printing out
 			ready_to_send <= '1';
 		elsif uar_data /= 13 then
@@ -349,7 +348,9 @@ p_ready <= ready;
 prev_clk <= clk_i;
 end process;
 
-ld1 <= '1' when sender_state = accept else '0';
-ld2 <= fifo_wr_sig;
+ld0 <= fifo_full;
+--ld1 <= '1' when sender_state = accept else '0';
+ld1 <= ready;
+ld2 <= p_ready; -- TODO: this is never changing
 
 end Behavioral;
