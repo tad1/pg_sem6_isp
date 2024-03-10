@@ -353,9 +353,9 @@ elsif recieved = '1' then
 end if;
 end process;
 
-ld0 <= '1' when sender_state = load_symbols else '0';
-ld1 <= '1' when sender_state = send else '0'; -- this gets triggered!
-ld2 <= fifo_rd_pulse;
+ld0 <= ready_to_send;
+ld1 <= recieved; -- this gets triggered!
+ld2 <= '1' when sender_state /= accept else '0';
 
 --ld0 <= fifo_full;
 --ld1 <= '1' when sender_state = accept else '0';
