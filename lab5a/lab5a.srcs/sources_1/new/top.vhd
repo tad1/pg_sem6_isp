@@ -332,7 +332,7 @@ elsif recieved = '1' then
 	recieved <= '0';
 end if;
 
-if sender_state = load_symbols and rising_edge(clk_i) then
+if sender_state = load_symbols then
 	if load_state = request then
 		fifo_rd_sig <= not fifo_rd_sig;
 		load_state := read;
@@ -347,11 +347,16 @@ if sender_state = load_symbols and rising_edge(clk_i) then
 	end if;
 end if;
 
+if load_state = request then
+	ld2 <= '1';
+else
+	ld2 <= '0';
+end if;
+
 end process;
 
-ld0 <= '1' when recieved = '0' else '0';
-ld1 <= fifo_wr_sig;
-ld2 <= ready_to_send;
+ld0 <= '1' when sender_state = load_symbols else '0';
+ld1 <= fifo_rd_sig;
 
 
 --ld0 <= fifo_full;
