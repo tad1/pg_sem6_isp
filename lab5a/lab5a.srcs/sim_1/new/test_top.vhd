@@ -69,6 +69,7 @@ begin
 	);
 	
 	process begin
+	wait for 10ms;
 	for i in nbits-1 downto 0 loop
 		RXD_i <= transmission(i);
 		wait for 104.16 us; -- 1/9600 sec

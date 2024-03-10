@@ -28,6 +28,8 @@ entity top is
            RXD_i : in STD_LOGIC;
            TXD_o : out STD_LOGIC;
            ld0 : out STD_LOGIC;
+           ld1 : out STD_LOGIC;
+           ld2 : out STD_LOGIC;
            led7_an_o : out STD_LOGIC_VECTOR (3 downto 0);
            led7_seg_o : out STD_LOGIC_VECTOR (7 downto 0));
 end top;
@@ -344,5 +346,8 @@ if ready = '1' and p_ready = '0' then
 end if;
 p_ready <= ready;
 end process;
+
+ld1 <= '1' when sender_state = accept else '0';
+ld2 <= uat_sig;
 
 end Behavioral;
