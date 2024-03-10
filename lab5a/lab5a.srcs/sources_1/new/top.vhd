@@ -314,6 +314,7 @@ if (ready_to_send = '1' or fifo_full = '1') and sender_state = accept then
 	n_buf_chars <= n_chars;
 	n_chars <= 0;
 	ready_to_send <= '0';
+	letter_i := 0;
 	sender_state <= load_symbols;
 end if;
 
@@ -348,7 +349,7 @@ if sender_state = load_symbols then
 end if;
 
 if load_state = request then
-	ld2 <= '1';
+	ld2 <= '1'; -- this gets tirggered!
 else
 	ld2 <= '0';
 end if;
@@ -356,7 +357,7 @@ end if;
 end process;
 
 ld0 <= '1' when sender_state = load_symbols else '0';
-ld1 <= fifo_rd_sig;
+ld1 <= '1' when sender_state = send else '0'; -- this gets triggered!
 
 
 --ld0 <= fifo_full;
