@@ -335,10 +335,13 @@ end if;
 
 
 if ready = '1' and p_ready = '0' then -- todo: check if we get to this loop and why not
+	ld0 <= '1';
 	if fifo_full = '0' then
+		ld1 <= '1';
 		if uar_data = 13 and sender_state = accept then -- ignore ENTER while printing out
 			ready_to_send <= '1';
 		elsif uar_data /= 13 then
+			ld2 <= '1';
 			n_chars <= n_chars + 1; 
 			fifo_wr_sig <= not fifo_wr_sig;
 		end if;
@@ -348,9 +351,8 @@ p_ready <= ready;
 prev_clk <= clk_i;
 end process;
 
-ld0 <= fifo_full;
+--ld0 <= fifo_full;
 --ld1 <= '1' when sender_state = accept else '0';
-ld1 <= ready;
-ld2 <= p_ready; -- TODO: this is never changing
+--ld2 <= p_ready; -- TODO: this is never changing
 
 end Behavioral;
