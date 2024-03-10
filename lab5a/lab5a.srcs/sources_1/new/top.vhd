@@ -215,12 +215,12 @@ begin
 	);
 	
 	hexc1: hex2seg Port map(
-		hex_i => fifo_rd_data(3 downto 0),
+		hex_i => uar_data(3 downto 0),
 		seg_o => disp_seg(7 downto 0)
 	);
 	
 	hexc2: hex2seg Port map(
-		hex_i => fifo_rd_data(7 downto 4),
+		hex_i => uar_data(7 downto 4),
 		seg_o => disp_seg(15 downto 8)
 	);
 	
