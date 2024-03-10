@@ -347,8 +347,11 @@ case current_state is
 			end if;
 		end if;
 
-end case;
-
+	end case;
 end process;
+
+ld0 <= '1' when current_state = accept  else '0';
+ld1 <= '1' when current_state = ld_rec  else '0';
+ld2 <= '1' when current_state = sd_send  else '0';
 
 end Behavioral;
