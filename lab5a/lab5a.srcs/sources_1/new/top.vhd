@@ -28,8 +28,6 @@ entity top is
            RXD_i : in STD_LOGIC;
            TXD_o : out STD_LOGIC;
            ld0 : out STD_LOGIC := '0';
-           ld1 : out STD_LOGIC := '0';
-           ld2 : out STD_LOGIC := '0';
            led7_an_o : out STD_LOGIC_VECTOR (3 downto 0);
            led7_seg_o : out STD_LOGIC_VECTOR (7 downto 0));
 end top;
@@ -304,7 +302,7 @@ case current_state is
 			current_state <= sd_send;
 		end if;
 	when sd_send =>
-		if rom_result(pixel_no) = '1' then
+		if rom_result(character_width-pixel_no-1) = '1' then
 			if (unsigned(letters(send_char_no)) < 32) or (127 < unsigned(letters(send_char_no))) then
 				uat_send_data <= std_logic_vector(to_unsigned(character'pos('*'), 8));
 			else
@@ -353,8 +351,6 @@ case current_state is
 	end case;
 end process;
 
-ld0 <= '1' when current_state = accept  else '0';
-ld1 <= '1' when current_state = ld_rec  else '0';
-ld2 <= '1' when current_state = sd_send  else '0';
+ld0 <= fifo_full;
 
 end Behavioral;
