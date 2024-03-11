@@ -37,11 +37,8 @@ end uat_test;
 
 architecture Behavioral of uat_test is
 	component uat is
-	Generic (
-		send_bits: integer := 8
-	);
 	Port ( clk_i : in STD_LOGIC;
-           data_i : in STD_LOGIC_VECTOR (send_bits-1 downto 0);
+           data_i : in STD_LOGIC_VECTOR (7 downto 0);
            TRX : out STD_LOGIC := '1';
            busy_o : out STD_LOGIC;
            send_i : in STD_LOGIC);
@@ -54,7 +51,8 @@ signal busy : STD_LOGIC;
 signal send : STD_LOGIC;
 begin
 	
-	uatc: uat Port map(
+	uatc: uat
+	 Port map(
 		clk_i => clk,
 		data_i => data,
 		TRX => TRX,

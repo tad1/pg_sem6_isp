@@ -34,12 +34,9 @@ begin
 		if send_i = '1' and state = waiting then
 			state <= requested;
 			busy <= '1';
-		end if;
-		
-		
-		if rising_edge(clk_i) then
+		elsif rising_edge(clk_i) then
 			if state = sending then
-				if nbit /= send_bits then
+				if nbit < send_bits then
 					TRX <= data_i(nbit);
 					nbit := nbit + 1;
 				else

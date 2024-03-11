@@ -130,6 +130,7 @@ signal uat_sig : STD_LOGIC := '0';
 signal uat_pulse : STD_LOGIC := '0';
 signal uat_busy : STD_LOGIC := '1';
 
+--						0		1		2		3		4		5		6		7		8
 type SenderState is (accept, ld_req, ld_wait, ld_rec, sd_req, sd_wait, sd_send, sd_CR, sd_LF);
 signal current_state : SenderState := accept;
 
@@ -257,19 +258,19 @@ begin
 wait until rising_edge(clk_i);
 
 -- handle recieving
---if ready = '1' then
---	if fifo_full = '0' and recieved = '0' then
---		if uar_data = 13 and current_state = accept then -- ignore ENTER while printing out
---			ready_to_send <= '1';
---		elsif uar_data /= 13 then
---			n_chars <= n_chars + 1; 
---			fifo_wr_sig <= not fifo_wr_sig; -- todo: somehow this is set only once, and gets reset when I hit enter..
---		end if;
---		recieved <= '1';
---	end if;
---elsif recieved = '1' then
---	recieved <= '0';
---end if;
+if ready = '1' then
+	if fifo_full = '0' and recieved = '0' then
+		if uar_data = 13 and current_state = accept then -- ignore ENTER while printing out
+			ready_to_send <= '1';
+		elsif uar_data /= 13 then
+			n_chars <= n_chars + 1; 
+			fifo_wr_sig <= not fifo_wr_sig; -- todo: somehow this is set only once, and gets reset when I hit enter..
+		end if;
+		recieved <= '1';
+	end if;
+elsif recieved = '1' then
+	recieved <= '0';
+end if;
 
 
 case current_state is
@@ -280,15 +281,6 @@ case current_state is
 			ready_to_send <= '0';
 			reading_letter := 0;
 			current_state <= ld_req;
-		end if;
-		
-		if ready = '1' then
-				if uar_data = 13 then -- ignore ENTER while printing out
-					ready_to_send <= '1';
-				elsif uar_data /= 13 then
-					n_chars <= n_chars + 1; 
-					fifo_wr_sig <= not fifo_wr_sig; -- todo: somehow this is set only once, and gets reset when I hit enter..
-				end if;
 		end if;
 	when ld_req =>
 		fifo_rd_sig <= not fifo_rd_sig;
@@ -326,6 +318,8 @@ case current_state is
 			
 		if pixel_no + 1 < character_width then
 			pixel_no := pixel_no + 1;
+			current_state <= sd_wait;
+			
 		else
 			pixel_no := 0;
 			if send_char_no + 1 < n_buff_chars then
