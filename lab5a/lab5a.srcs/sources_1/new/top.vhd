@@ -273,9 +273,15 @@ end if;
 
 case current_state is
 	when accept =>
-		if fifo_full = '1' or ready_to_send = '1' then
-			n_buff_chars <= n_chars;
-			n_chars <= 0;
+		if n_chars >= max_chars or ready_to_send = '1' then
+			if n_chars >= max_chars then
+				n_buff_chars <= max_chars;
+				n_chars <=  n_chars - max_chars;
+			else
+				n_buff_chars <= n_chars;
+				n_chars <= 0;
+			end if;
+
 			ready_to_send <= '0';
 			reading_letter := 0;
 			current_state <= ld_req;
