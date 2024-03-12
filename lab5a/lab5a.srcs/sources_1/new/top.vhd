@@ -217,12 +217,12 @@ begin
 	-- NOTE: is recieves good information
 	-- but it probaly don't show overflow at all, is it at all stored in fifo??
 	hexc1: hex2seg Port map(
-		hex_i => fifo_rd_data(3 downto 0),
+		hex_i => uar_data(3 downto 0),
 		seg_o => disp_seg(7 downto 0)
 	);
 	
 	hexc2: hex2seg Port map(
-		hex_i => fifo_rd_data(7 downto 4),
+		hex_i => uar_data(7 downto 4),
 		seg_o => disp_seg(15 downto 8)
 	);
 	
@@ -301,20 +301,19 @@ case current_state is
 		if uat_busy = '0' then
 			current_state <= sd_send;
 		end if;
-	when sd_send =>
-		if rom_result(character_width-pixel_no-1) = '1' then
-			if (unsigned(letters(send_char_no)) < 32) or (127 < unsigned(letters(send_char_no))) then
-				uat_send_data <= std_logic_vector(to_unsigned(character'pos('*'), 8));
+	when sd_send =>			
+		if pixel_no + 1 < character_width and send_char_no < n_buff_chars  then			
+			if rom_result(character_width-pixel_no-1) = '1' then
+				if (unsigned(letters(send_char_no)) < 32) or (127 < unsigned(letters(send_char_no))) then
+					uat_send_data <= std_logic_vector(to_unsigned(character'pos('*'), 8));
+				else
+					uat_send_data <= letters(send_char_no);
+				end if;
 			else
-				uat_send_data <= letters(send_char_no);
+				uat_send_data <= std_logic_vector(to_unsigned(character'pos(' '), 8));
 			end if;
-		else
-			uat_send_data <= std_logic_vector(to_unsigned(character'pos(' '), 8));
-		end if;
-			
-		uat_sig <= not uat_sig;
-			
-		if pixel_no + 1 < character_width then
+				
+			uat_sig <= not uat_sig;
 			pixel_no := pixel_no + 1;
 			current_state <= sd_wait;
 			
