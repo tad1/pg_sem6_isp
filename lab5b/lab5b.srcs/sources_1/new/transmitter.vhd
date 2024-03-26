@@ -45,8 +45,8 @@ architecture Behavioral of transmitter is
 	
 	
 	type TRState is (front_vis, vis_area, back_vis, front, sync, back);
-	signal h_state : TRState := front_vis;
-	signal v_state : TRState := front_vis;
+	signal h_state : TRState := front;
+	signal v_state : TRState := front;
 	signal v_counter : integer := 0;
 	signal h_counter : integer := 0;
 	signal pixel_en : STD_LOGIC := '0';
