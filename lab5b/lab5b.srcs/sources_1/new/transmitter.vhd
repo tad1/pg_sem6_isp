@@ -141,8 +141,9 @@ begin
 	vsync_o <= '0' when v_state = sync else '1';
 	
 	-- TODO: this should be synchronic
+	--TODO: pixel fixxx!!
 	red_o <= "0000" when pixel_en = '0' and (h_state = vis_area) and (v_state = vis_area) else "1111";
-	green_o <= "0000" when pixel_en = '0' and (h_state = vis_area) and (v_state = vis_area) else "1111";
+	green_o <= "0000" when pixel_en = '0' and (h_state /= vis_area) and (v_state /= vis_area) else "1111";
 	blue_o <= "0000" when pixel_en = '0' and (h_state = vis_area) and (v_state = vis_area) else "1111";
 
 end Behavioral;

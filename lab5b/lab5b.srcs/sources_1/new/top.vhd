@@ -195,8 +195,8 @@ begin
 			write_signal <= not write_signal;
 			y_tmp := unsigned(not y_val(10) & y_val(9 downto 0)) + 1;
 			x_tmp := unsigned(not x_val(10) & x_val(9 downto 0)) + 1;
-			y_tmp2 := std_logic_vector(y_tmp + (y_tmp/ 2));
-			x_tmp2 := std_logic_vector(x_tmp + (x_tmp/ 2));
+			y_tmp2 := std_logic_vector(y_tmp/2 + (y_tmp/ 4));
+			x_tmp2 := std_logic_vector(x_tmp/2 + (x_tmp/ 4));
 			
 			wr_addr(17 downto 9) <= y_tmp2(10 downto 2);
 			wr_addr(8 downto 0) <= x_tmp2(10 downto 2);
