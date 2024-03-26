@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="17221666fs"></ZoomStartTime>
-      <ZoomEndTime time="20861667fs"></ZoomEndTime>
-      <Cursor1Time time="18315000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="14640000001fs"></ZoomEndTime>
+      <Cursor1Time time="8326345000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="122"></ValueColumnWidth>
+      <ValueColumnWidth column_width="118"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="18" />
+   <WVObjectSize size="22" />
    <wvobject type="logic" fp_name="/test_top/topc/clk_i">
       <obj_property name="ElementShortName">clk_i</obj_property>
       <obj_property name="ObjectShortName">clk_i</obj_property>
@@ -91,5 +91,27 @@
    <wvobject type="array" fp_name="/test_top/topc/y_val">
       <obj_property name="ElementShortName">y_val[10:0]</obj_property>
       <obj_property name="ObjectShortName">y_val[10:0]</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/test_top/topc/transmitterc/v_counter">
+      <obj_property name="ElementShortName">v_counter</obj_property>
+      <obj_property name="ObjectShortName">v_counter</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/test_top/topc/transmitterc/h_counter">
+      <obj_property name="ElementShortName">h_counter</obj_property>
+      <obj_property name="ObjectShortName">h_counter</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/test_top/topc/transmitterc/h_state">
+      <obj_property name="ElementShortName">h_state</obj_property>
+      <obj_property name="ObjectShortName">h_state</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/test_top/topc/transmitterc/v_state">
+      <obj_property name="ElementShortName">v_state</obj_property>
+      <obj_property name="ObjectShortName">v_state</obj_property>
    </wvobject>
 </wave_config>

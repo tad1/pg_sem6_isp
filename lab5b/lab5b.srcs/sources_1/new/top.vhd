@@ -145,7 +145,7 @@ begin
 	
 	transmitterc : transmitter Port map(
 		clk => trx_clk,
-		pixel_value => '0',
+		pixel_value => pixel_val,
 		pixel_addr => pixel_addr,
 		red_o => red_o,
 		green_o => green_o,
