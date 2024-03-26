@@ -135,7 +135,7 @@ signal y_val : STD_LOGIC_VECTOR(10 downto 0);
 begin
 	trx_clkc : clk_div 
 	Generic map(
-		divisior => 4
+		divisior => 2
 	)
 	Port map(
 		clk_i => clk_i,
