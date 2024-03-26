@@ -38,10 +38,12 @@ end transmitter;
 
 architecture Behavioral of transmitter is
 	constant h_vis_front : integer := (h_vis - size_x) / 2;
-	constant h_vis_back : integer := (h_vis - size_x) / 2 + (h_vis - size_x) mod 2;
+	constant h_vis_back : integer := (h_vis - size_x) / 2 + (h_vis - size_x + 1) mod 2;
+	constant h_vis_x : integer := size_x - 1;
+	constant h_vis_y : integer := size_y - 1;
 	
 	constant v_vis_front : integer := (v_vis - size_y) / 2;
-	constant v_vis_back : integer := (v_vis - size_y) / 2 + (v_vis - size_y) mod 2;
+	constant v_vis_back : integer := (v_vis - size_y) / 2 + (v_vis - size_y + 1) mod 2;
 	
 	
 	type TRState is (front_vis, vis_area, back_vis, front, sync, back);
@@ -69,7 +71,7 @@ begin
 					h_state <= vis_area;
 				end if;
 			when vis_area =>
-				if(h_counter >= h_vis) then
+				if(h_counter >= h_vis_x) then
 					h_counter <= 0;
 					h_state <= back_vis;
 				elsif(h_counter + 1 < h_vis) then
@@ -107,7 +109,7 @@ begin
 					v_state <= vis_area;
 				end if;
 			when vis_area =>
-				if(v_counter >= v_vis) then
+				if(v_counter >= h_vis_y) then
 					v_counter <= 0;
 					v_state <= back_vis;
 				end if;

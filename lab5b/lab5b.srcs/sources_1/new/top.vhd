@@ -68,15 +68,15 @@ end component;
 
 component transmitter is
 	Generic (
-		h_vis : integer := 640;
-		h_front: integer := 16;
-		h_sync: integer := 96;
-		h_back: integer := 48;
+		h_vis : integer := 640-1;
+		h_front: integer := 16-1;
+		h_sync: integer := 96-1;
+		h_back: integer := 48-1;
 		
-		v_vis: integer := 480;
-		v_front: integer := 10;
-		v_sync: integer := 2;
-		v_back: integer := 33;
+		v_vis: integer := 480-1;
+		v_front: integer := 10-1;
+		v_sync: integer := 2-1;
+		v_back: integer := 33-1;
 		
 		size_x: integer := 384;
 		size_y: integer := 384
