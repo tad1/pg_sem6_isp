@@ -73,10 +73,10 @@ component transmitter is
 		h_sync: integer := 96-1;
 		h_back: integer := 48-1;
 		
-		v_vis: integer := 480-1;
-		v_front: integer := 11-1;
-		v_sync: integer := 2-1;
-		v_back: integer := 31-1;
+		v_vis: integer := 480;
+		v_front: integer := 10;
+		v_sync: integer := 2;
+		v_back: integer := 33;
 		
 		size_x: integer := 384;
 		size_y: integer := 384

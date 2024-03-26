@@ -18,9 +18,9 @@ entity transmitter is
 		h_back: integer := 48-1;
 		
 		v_vis: integer := 480-1;
-		v_front: integer := 11-1;
+		v_front: integer := 10-1;
 		v_sync: integer := 2-1;
-		v_back: integer := 31-1;
+		v_back: integer := 33-1;
 		
 		size_x: integer := 384;
 		size_y: integer := 384
@@ -49,13 +49,13 @@ architecture Behavioral of transmitter is
 	type TRState is (front_vis, vis_area, back_vis, front, sync, back);
 	signal h_state : TRState := sync;
 	signal v_state : TRState := sync;
-	signal v_counter : integer := 1;
-	signal h_counter : integer := 1;
+	signal v_counter : integer := 0;
+	signal h_counter : integer := 0;
 	signal pixel_en : STD_LOGIC := '0';
 begin
 	process begin
 	wait until rising_edge(clk);
-		if(h_counter+1 >= h_back) and h_state = back then
+		if(h_counter >= h_back) and h_state = back then
 			v_counter <= v_counter + 1;
 		end if;
 		h_counter <= h_counter + 1;
