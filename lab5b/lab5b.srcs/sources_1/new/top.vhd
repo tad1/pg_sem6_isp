@@ -167,7 +167,7 @@ begin
 		w_data => '1',
 		r_addr => pixel_addr,
 		r_data => pixel_val,
-		clear => '0',
+		clear => btn_i(0),
 		busy => open
 		
 	);
