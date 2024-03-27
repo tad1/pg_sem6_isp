@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -90,6 +90,13 @@ component hex2seg is
            seg_o : out STD_LOGIC_VECTOR (7 downto 0));
 end component;
 
+component sig_acc is
+	Generic (value : unsigned(31 downto 0));
+    Port ( clk_i : in STD_LOGIC;
+           sig_i : in STD_LOGIC;
+           sig_o : out STD_LOGIC);
+end component;
+
 signal         address : std_logic_vector(11 downto 0);
 signal     instruction : std_logic_vector(17 downto 0);
 signal     bram_enable : std_logic;
@@ -112,10 +119,47 @@ signal             rdl : std_logic;
 
 signal     int_request : std_logic;
 
+signal deb_buttons : STD_LOGIC_VECTOR(3 downto 0) := "0000";
 signal digit_i : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 signal seg_i : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+signal mode_switch : STD_LOGIC := '0';
 
 begin
+
+	mode_swc: sig_acc generic map(value => to_unsigned(50000000, 32))
+	port map(
+	clk_i => clk_i,
+	sig_i => button_i(3),
+	sig_o => mode_switch
+);
+
+	btndb1c: sig_acc generic map(value => to_unsigned(1, 32))
+	port map(
+		clk_i => clk_i,
+		sig_i => button_i(0),
+		sig_o => deb_buttons(0)
+	);
+	
+	btndb2c: sig_acc generic map(value => to_unsigned(1, 32))
+	port map(
+		clk_i => clk_i,
+		sig_i => button_i(1),
+		sig_o => deb_buttons(1)
+	);
+	
+	btndb3c: sig_acc generic map(value => to_unsigned(1, 32))
+	port map(
+		clk_i => clk_i,
+		sig_i => button_i(2),
+		sig_o => deb_buttons(2)
+	);
+	
+	btndb4c: sig_acc generic map(value => to_unsigned(1, 32))
+	port map(
+		clk_i => clk_i,
+		sig_i => button_i(3),
+		sig_o => deb_buttons(3)
+	);
 
 	bit0_h2sc: hex2seg port map(
 		hex_i => digit_i(15 downto 12),
@@ -181,7 +225,7 @@ begin
 	  input_ports: process begin
 	  	-- todo: add debouncing here
 	  	wait until rising_edge(clk_i);
-		in_port <= "0000" & button_i;
+		in_port <= "0000" & deb_buttons;
 
 	  end process input_ports;
 

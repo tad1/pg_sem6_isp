@@ -58,13 +58,13 @@ switch_mode:
              JUMP main
       byte1: 
              ADD s2, s6
-             OUTPUT s1, 02
+             OUTPUT s2, 02
              JUMP main
       byte2: 
              ADD s3, s6
-             OUTPUT s1, 04
+             OUTPUT s3, 04
              JUMP main
       byte3: 
-             ADD s2, s6
-             OUTPUT s1, 08
+             ADD s4, s6
+             OUTPUT s4, 08
              JUMP main
