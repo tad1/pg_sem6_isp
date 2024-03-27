@@ -37,12 +37,12 @@ JUMP main
 
 left:
     SUB s5, 01
-    AND s5, 04 
+    AND s5, 03
     JUMP main
 
 right:
     ADD s5, 01
-    AND s5, 04
+    AND s5, 03 ; 0011 - 3
     JUMP main
 
 increment:
