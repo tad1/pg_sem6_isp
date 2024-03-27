@@ -1,0 +1,78 @@
+start: 
+    LOAD s1, 00 ; MSB
+    LOAD s2, 00 
+    LOAD s3, 00
+    LOAD s4, 00 ; LSB
+    LOAD s5, 00 ; Selected
+    ; s6 accumulator
+    LOAD s7, 00 ; pstate
+    LOAD s8, 00 ; mask
+    CONSTANT hold_time, FF
+    CONSTANT blink_time, FF
+    ; input 00 : XXXT_LRUD
+main:
+    LOAD s7, s0
+    INPUT s0, 00
+    ; as long as there's no input change do nothing
+    LOAD s6, s0
+    XOR s6, s7
+    TEST s6, FF
+    JUMP Z, main
+
+    TEST s0, 01 ; 0000_0001
+        JUMP NZ, decrement
+    TEST s0, 02 ; 0000_0010
+        JUMP NZ, increment
+    TEST s0, 14 ; 0001_1000
+        JUMP NZ, switch_mode
+    TEST s0, 04 ; 0000_0100
+        JUMP NZ, right
+    TEST s0, 08 ; 0000_1000
+        JUMP NZ, left
+    JUMP main
+
+switch_mode:
+    XOR s5, 10
+JUMP main
+
+left:
+    SUB s5, 01
+    AND s5, 04 
+    JUMP main
+
+right:
+    ADD s5, 01
+    AND s5, 04
+    JUMP main
+
+increment:
+    LOAD s6, 01
+    JUMP apply
+decrement:
+    LOAD s6, 0F
+apply:
+    COMPARE s5, 01
+    JUMP Z, byte1
+    COMPARE s5, 02
+    JUMP Z, byte2
+    COMPARE s5, 03
+    JUMP Z, byte3 
+byte0:
+    ADD s1, s6
+    OUTPUT s1, 01
+    JUMP main
+byte1:
+    ADD s2, s6 
+    OUTPUT s1, 02
+    JUMP main
+byte2:
+    ADD s3, s6
+    OUTPUT s1, 04
+    JUMP main
+byte3:
+    ADD s2, s6
+    OUTPUT s1, 08
+    JUMP main
+
+    
+
