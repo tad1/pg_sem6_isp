@@ -15,16 +15,16 @@
              XOR s6, s7
              TEST s6, FF
              JUMP Z, main
-             TEST s0, 01         ; 0000_0001
-             JUMP NZ, decrement
-             TEST s0, 02         ; 0000_0010
-             JUMP NZ, increment
-             COMPARE s0, 14      ; 0001_1000
+             COMPARE s0, 01      ; 0000_0001
+             JUMP Z, decrement
+             COMPARE s0, 02      ; 0000_0010
+             JUMP Z, increment
+             COMPARE s0, 04      ; 0000_0100
+             JUMP Z, right
+             COMPARE s0, 18      ; 0001_1000
              JUMP Z, switch_mode
-             TEST s0, 04         ; 0000_0100
-             JUMP NZ, right
-             TEST s0, 08         ; 0000_1000
-             JUMP NZ, left
+             COMPARE s0, 08      ; 0000_1000
+             JUMP Z, left
              JUMP main
 switch_mode: 
              AND s5, 10
