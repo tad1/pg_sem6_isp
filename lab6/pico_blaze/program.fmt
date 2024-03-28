@@ -1,14 +1,11 @@
       start: 
-             LOAD s1, 00             ; MSB
+             LOAD s1, 00         ; MSB
              LOAD s2, 00
              LOAD s3, 00
-             LOAD s4, 00             ; LSB
-             LOAD s5, 00             ; Selected
+             LOAD s4, 00         ; LSB
+             LOAD s5, 00         ; Selected
              ; s6 accumulator
-             LOAD s7, 00             ; pstate
-             LOAD s8, 00             ; mask
-             CONSTANT hold_time, FF
-             CONSTANT blink_time, FF
+             LOAD s7, 00         ; pstate
              ; input 00 : XXXT_LRUD
        main: 
              LOAD s7, s0
@@ -18,15 +15,15 @@
              XOR s6, s7
              TEST s6, FF
              JUMP Z, main
-             TEST s0, 01             ; 0000_0001
+             TEST s0, 01         ; 0000_0001
              JUMP NZ, decrement
-             TEST s0, 02             ; 0000_0010
+             TEST s0, 02         ; 0000_0010
              JUMP NZ, increment
-             TEST s0, 10             ; 0001_1000
-             JUMP NZ, switch_mode
-             TEST s0, 04             ; 0000_0100
+             COMPARE s0, 14      ; 0001_1000
+             JUMP Z, switch_mode
+             TEST s0, 04         ; 0000_0100
              JUMP NZ, right
-             TEST s0, 08             ; 0000_1000
+             TEST s0, 08         ; 0000_1000
              JUMP NZ, left
              JUMP main
 switch_mode: 
@@ -41,7 +38,7 @@ switch_mode:
              JUMP main
       right: 
              ADD s5, 01
-             AND s5, 13              ; 0011 - 3
+             AND s5, 13          ; 0011 - 3
              OUTPUT s5, 10
              JUMP main
   increment: 
@@ -54,11 +51,11 @@ switch_mode:
              JUMP Z, main
              LOAD s6, 0F
       apply: 
-             COMPARE s5, 01
+             COMPARE s5, 11
              JUMP Z, byte1
-             COMPARE s5, 02
+             COMPARE s5, 12
              JUMP Z, byte2
-             COMPARE s5, 03
+             COMPARE s5, 13
              JUMP Z, byte3
       byte0: 
              ADD s1, s6
