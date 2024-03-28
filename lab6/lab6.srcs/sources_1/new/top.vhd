@@ -168,28 +168,28 @@ begin
 	sig_o => mode_switch
 );
 
-	btndb1c: sig_acc generic map(value => to_unsigned(1, 32))
+	btndb1c: sig_acc generic map(value => to_unsigned(2000000, 32))
 	port map(
 		clk_i => clk_i,
 		sig_i => button_i(0),
 		sig_o => deb_buttons(0)
 	);
 	
-	btndb2c: sig_acc generic map(value => to_unsigned(1, 32))
+	btndb2c: sig_acc generic map(value => to_unsigned(2000000, 32))
 	port map(
 		clk_i => clk_i,
 		sig_i => button_i(1),
 		sig_o => deb_buttons(1)
 	);
 	
-	btndb3c: sig_acc generic map(value => to_unsigned(1, 32))
+	btndb3c: sig_acc generic map(value => to_unsigned(2000000, 32))
 	port map(
 		clk_i => clk_i,
 		sig_i => button_i(2),
 		sig_o => deb_buttons(2)
 	);
 	
-	btndb4c: sig_acc generic map(value => to_unsigned(1, 32))
+	btndb4c: sig_acc generic map(value => to_unsigned(2000000, 32))
 	port map(
 		clk_i => clk_i,
 		sig_i => button_i(3),
