@@ -30,20 +30,28 @@
              JUMP NZ, left
              JUMP main
 switch_mode: 
+             AND s5, 10
              XOR s5, 10
+             OUTPUT s5, 10
              JUMP main
        left: 
-             SUB s5, 01
+             ADD s5, 03
              AND s5, 03
+             OUTPUT s5, 10
              JUMP main
       right: 
              ADD s5, 01
              AND s5, 03              ; 0011 - 3
+             OUTPUT s5, 10
              JUMP main
   increment: 
+             TEST s5, 10
+             JUMP Z, main
              LOAD s6, 01
              JUMP apply
   decrement: 
+             TEST s5, 10
+             JUMP Z, main
              LOAD s6, 0F
       apply: 
              COMPARE s5, 01

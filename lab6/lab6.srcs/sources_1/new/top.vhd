@@ -87,7 +87,9 @@ end component;
 
 component hex2seg is
     Port ( hex_i : in STD_LOGIC_VECTOR (3 downto 0);
-           seg_o : out STD_LOGIC_VECTOR (7 downto 0));
+           seg_o : out STD_LOGIC_VECTOR (7 downto 0);
+           bypas : in STD_LOGIC
+           );
 end component;
 
 component sig_acc is
@@ -95,6 +97,13 @@ component sig_acc is
     Port ( clk_i : in STD_LOGIC;
            sig_i : in STD_LOGIC;
            sig_o : out STD_LOGIC);
+end component;
+
+component clk_div is
+	Generic(divisior : integer);
+    Port ( clk_i : in STD_LOGIC;
+    		rst_i : in STD_LOGIC;
+           clk_o : out STD_LOGIC);
 end component;
 
 signal         address : std_logic_vector(11 downto 0);
@@ -123,8 +132,34 @@ signal deb_buttons : STD_LOGIC_VECTOR(3 downto 0) := "0000";
 signal digit_i : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 signal seg_i : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
 signal mode_switch : STD_LOGIC := '0';
+signal current_mode : STD_LOGIC := '0';
+signal current_digit : STD_LOGIC_VECTOR(3 downto 0) := "0000";
+signal bypas_signal : STD_LOGIC_VECTOR(3 downto 0) := "0000";
+signal blink_clk : STD_LOGIC := '0';
+signal do_blink : STD_LOGIC := '0';
+signal khz_clk : STD_LOGIC := '0';
 
 begin
+
+	khz_clk_divc: clk_div 
+		generic map(
+			divisior => 100000
+		)
+		port map(
+			clk_i => clk_i,
+			rst_i => '0',
+			clk_o => khz_clk
+		);
+		
+	blink_clk_divc: clk_div 
+		generic map(
+			divisior => 800
+		)
+		port map(
+			clk_i => khz_clk,
+			rst_i => '0',
+			clk_o => blink_clk
+		);
 
 	mode_swc: sig_acc generic map(value => to_unsigned(50000000, 32))
 	port map(
@@ -163,22 +198,26 @@ begin
 
 	bit0_h2sc: hex2seg port map(
 		hex_i => digit_i(15 downto 12),
-		seg_o => seg_i(31 downto 24)
+		seg_o => seg_i(31 downto 24),
+		bypas => bypas_signal(0)
 	);
 	
 	bit1_h2sc: hex2seg port map(
 		hex_i => digit_i(11 downto 8),
-		seg_o => seg_i(23 downto 16)
+		seg_o => seg_i(23 downto 16),
+		bypas => bypas_signal(1)
 	);
 	
 	bit2_h2sc: hex2seg port map(
 		hex_i => digit_i(7 downto 4),
-		seg_o => seg_i(15 downto 8)
+		seg_o => seg_i(15 downto 8),
+		bypas => bypas_signal(2)
 	);
 	
 	bit3_h2sc: hex2seg port map(
 		hex_i => digit_i(3 downto 0),
-		seg_o => seg_i(7 downto 0)
+		seg_o => seg_i(7 downto 0),
+		bypas => bypas_signal(3)
 	);
 
 	displayc: display port map(
@@ -244,7 +283,22 @@ begin
 			if port_id(3) = '1' then
 				digit_i(3 downto 0) <= out_port(3 downto 0);
 			end if;
+			if port_id(4) = '1' then
+				current_mode <= out_port(4);
+				case out_port(1 downto 0) is
+					when "00" =>
+						 current_digit <= "1000";
+					when "01" =>
+						 current_digit <= "0100";
+					when "10" =>
+						 current_digit <= "0010";
+					when "11" =>
+						 current_digit <= "0001";
+				end case;
+			end if;
 		end if;
 	end process;
+	do_blink <= blink_clk and current_mode;
+	bypas_signal <= current_digit and do_blink & do_blink & do_blink & do_blink;
 
 end Behavioral;
