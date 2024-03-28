@@ -146,7 +146,7 @@ begin
   		y_offset <= value;
   	end if;
   	
-	if(areset = '1' and (state /= config1 or state /= config2)) then
+	if(areset = '1' and state /= config1 and state /= config2 and state /= reset) then
   		state <= config1;
   		ready <= '0';
   	end if;

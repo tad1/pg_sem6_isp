@@ -53,7 +53,9 @@ architecture Behavioral of transmitter is
 	signal h_counter : integer := 0;
 	signal pixel_en : STD_LOGIC := '0';
 begin
-	process begin
+	process 
+	variable tmp: integer := 0;
+	begin
 	wait until rising_edge(clk);
 		if(h_counter >= h_back) and h_state = back then
 			v_counter <= v_counter + 1;
@@ -66,8 +68,8 @@ begin
 				if(h_counter >= h_vis_front) then
 					h_counter <= 0;
 					-- this could be function?
-					pixel_addr(8 downto 0) <= std_logic_vector(to_unsigned(0, 9));
-					pixel_addr(17 downto 9) <= std_logic_vector(to_unsigned(v_counter, 9));
+					tmp := (v_counter * 384) + 0;
+					pixel_addr <= std_logic_vector(to_unsigned(tmp, 18));
 					h_state <= vis_area;
 				end if;
 			when vis_area =>
@@ -75,8 +77,8 @@ begin
 					h_counter <= 0;
 					h_state <= back_vis;
 				elsif(h_counter + 1 < h_vis) then
-					pixel_addr(8 downto 0) <= std_logic_vector(to_unsigned(h_counter + 1, 9));
-					pixel_addr(17 downto 9) <= std_logic_vector(to_unsigned(v_counter, 9));
+					tmp := (v_counter * 384) + h_counter + 1;
+					pixel_addr <= std_logic_vector(to_unsigned(tmp, 18));
 				end if;
 			
 			-- ah yeah.. the smell of  error-prune code redundancy at the midnight!
