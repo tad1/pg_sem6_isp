@@ -107,6 +107,11 @@ component memory is
            busy : out STD_LOGIC);
 end component;
 
+component btn_debouncer is
+    Port ( clk_i : in STD_LOGIC;
+           btn_i : in STD_LOGIC;
+           sig_o : out STD_LOGIC);
+end component;
 
 component pulse_generator is
     Port ( clk : in STD_LOGIC;
@@ -119,6 +124,7 @@ signal wr_addr :  STD_LOGIC_VECTOR (17 downto 0);
 
 signal pixel_addr : STD_LOGIC_VECTOR (17 downto 0);
 signal pixel_val : STD_LOGIC;
+signal btn_dbn : STD_LOGIC_VECTOR(3 downto 0);
 
 signal gen_ready : STD_LOGIC := '0';
 signal write_signal :STD_LOGIC := '0';
@@ -181,21 +187,19 @@ begin
 	process 
 	variable y_tmp : unsigned(10 downto 0);
 	variable x_tmp : unsigned(10 downto 0);
-	variable y_tmp2 : unsigned(10 downto 0);
-	variable x_tmp2 : unsigned(10 downto 0);
-	variable addr : unsigned(21 downto 0);
-	variable addr_vec : std_logic_vector(21 downto 0);
+	variable y_tmp2 : std_logic_vector(10 downto 0);
+	variable x_tmp2 : std_logic_vector(10 downto 0);
 	begin
 		wait until rising_edge(clk_i);
 		if (gen_ready = '1') then
 			write_signal <= not write_signal;
 			y_tmp := unsigned(not y_val(10) & y_val(9 downto 0)) + 1;
 			x_tmp := unsigned(not x_val(10) & x_val(9 downto 0)) + 1;
-			x_tmp2 := x_tmp2/2 + (x_tmp/ 4);
-			y_tmp2 := y_tmp2/2 + (y_tmp2/ 4);
-			addr := y_tmp * 384 + x_tmp;
-			addr_vec := std_logic_vector(addr);
-			wr_addr <= addr_vec(17 downto 0);			
+			y_tmp2 := std_logic_vector(y_tmp/2 + (y_tmp/ 4));
+			x_tmp2 := std_logic_vector(x_tmp/2 + (x_tmp/ 4));
+			
+			wr_addr(17 downto 9) <= y_tmp2(10 downto 2);
+			wr_addr(8 downto 0) <= x_tmp2(10 downto 2);
 			
 			
 		end if;
