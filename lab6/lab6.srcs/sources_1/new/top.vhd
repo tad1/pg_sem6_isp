@@ -264,7 +264,7 @@ begin
 	  input_ports: process begin
 	  	-- todo: add debouncing here
 	  	wait until rising_edge(clk_i);
-		in_port <= "0000" & deb_buttons;
+		in_port <= "000" & mode_switch & deb_buttons;
 
 	  end process input_ports;
 
@@ -287,13 +287,13 @@ begin
 				current_mode <= out_port(4);
 				case out_port(1 downto 0) is
 					when "00" =>
-						 current_digit <= "1000";
-					when "01" =>
-						 current_digit <= "0100";
-					when "10" =>
-						 current_digit <= "0010";
-					when "11" =>
 						 current_digit <= "0001";
+					when "01" =>
+						 current_digit <= "0010";
+					when "10" =>
+						 current_digit <= "0100";
+					when "11" =>
+						 current_digit <= "1000";
 				end case;
 			end if;
 		end if;

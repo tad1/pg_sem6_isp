@@ -22,7 +22,7 @@
              JUMP NZ, decrement
              TEST s0, 02             ; 0000_0010
              JUMP NZ, increment
-             TEST s0, 14             ; 0001_1000
+             TEST s0, 10             ; 0001_1000
              JUMP NZ, switch_mode
              TEST s0, 04             ; 0000_0100
              JUMP NZ, right
@@ -36,12 +36,12 @@ switch_mode:
              JUMP main
        left: 
              ADD s5, 03
-             AND s5, 03
+             AND s5, 13
              OUTPUT s5, 10
              JUMP main
       right: 
              ADD s5, 01
-             AND s5, 03              ; 0011 - 3
+             AND s5, 13              ; 0011 - 3
              OUTPUT s5, 10
              JUMP main
   increment: 
