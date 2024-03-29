@@ -25,7 +25,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
-
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_SIGNED.ALL;
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
@@ -185,23 +186,15 @@ begin
 	);
 	
 	process 
-	variable y_tmp : unsigned(10 downto 0);
-	variable x_tmp : unsigned(10 downto 0);
-	variable y_tmp2 : std_logic_vector(10 downto 0);
-	variable x_tmp2 : std_logic_vector(10 downto 0);
+	variable y : integer;
+	variable x : integer;
 	begin
 		wait until rising_edge(clk_i);
 		if (gen_ready = '1') then
 			write_signal <= not write_signal;
-			y_tmp := unsigned(not y_val(10) & y_val(9 downto 0)) + 1;
-			x_tmp := unsigned(not x_val(10) & x_val(9 downto 0)) + 1;
-			y_tmp2 := std_logic_vector(y_tmp/2 + (y_tmp/ 4));
-			x_tmp2 := std_logic_vector(x_tmp/2 + (x_tmp/ 4));
-			
-			wr_addr(17 downto 9) <= y_tmp2(10 downto 2);
-			wr_addr(8 downto 0) <= x_tmp2(10 downto 2);
-			
-			
+			x := conv_integer(x_val(10 downto 3));
+			y := conv_integer(y_val(10 downto 3));
+			wr_addr <= CONV_STD_LOGIC_VECTOR((x + 384 / 2) * 384 + y + 384 / 2, 18);
 		end if;
 	end process;
 
