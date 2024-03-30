@@ -219,7 +219,7 @@ enum action_t read_action(){
 		return SWAP;
 	case 'R':
 		return ROTATE;
-	case 10:
+	case 13:
 		return PUSH;
 	case '.':
 		return BRIGHT_INC;

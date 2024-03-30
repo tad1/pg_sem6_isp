@@ -13,7 +13,6 @@
 #endif
 
 #include "platform.h"
-#include "xil_printf.h"
 
 
 
@@ -57,7 +56,7 @@
  * making this number larger reduces the amount of time this example consumes
  * because it is the value the timer counter is loaded with when it is started
  */
-#define RESET_VALUE	 0xF0000000
+#define RESET_VALUE	 0xFFF00000
 
 
 
@@ -126,6 +125,13 @@ enum action_t {
 	BRIGHT_DEC
 };
 
+const int MAX_BRIGHTNESS = 16;
+const int MIN_BRIGHTNESS = 8;
+volatile int brightness = 12;
+volatile int cycle = 0;
+volatile int anode_n = 0;
+volatile int enabled = 0;
+
 int T=0,Z=0,Y=0,X=0;
 int tmp;
 char read_char;
@@ -136,8 +142,8 @@ void pop_stack(){
 	Z = T;
 };
 
-void execute(enum action_t operator){
-	switch(operator) {
+void execute(enum action_t action){
+	switch(action) {
 	case ADD:
 		Y = X + Y;
 		pop_stack();
@@ -182,6 +188,11 @@ void execute(enum action_t operator){
 		tmp = read_char - '0';
 		X = X * 10 + tmp;
 		break;
+	case BRIGHT_INC:
+		brightness = (++brightness >= MAX_BRIGHTNESS) ? MAX_BRIGHTNESS : brightness;
+		break;
+	case BRIGHT_DEC:
+		brightness = (--brightness <= MIN_BRIGHTNESS) ? MIN_BRIGHTNESS : brightness;
 	default:
 		break;
 	};
@@ -223,22 +234,10 @@ enum action_t read_action(){
 }
 
 
-
-int main()
-{
-    init_platform();
-
-    print("Hello World\n\r");
-
-    cleanup_platform();
-    return 0;
-}
-
-
 #ifndef TESTAPP_GEN
 int main(void)
 {
-
+	init_platform();
 	int Status;
 
 	/*
@@ -251,12 +250,20 @@ int main(void)
 				  TIMER_CNTR_0);
 	if (Status != XST_SUCCESS) {
 		xil_printf("Tmrctr interrupt Example Failed\r\n");
+		cleanup_platform();
 		return XST_FAILURE;
 	}
+	xil_printf("Welcome to RPN calculator:\r\n>");
 
-	xil_printf("Successfully ran Tmrctr interrupt Example\r\n");
+	while(1){
+		enum action_t action = read_action();
+		if(action == PUSH)
+			xil_printf(":");
+		execute(action);
+	}
+
+	cleanup_platform();
 	return XST_SUCCESS;
-
 }
 #endif
 
@@ -292,7 +299,6 @@ int TmrCtrIntrExample(INTC *IntcInstancePtr,
 			u8 TmrCtrNumber)
 {
 	int Status;
-	int LastTimerExpired = 0;
 
 	/*
 	 * Initialize the timer counter so that it's ready to use,
@@ -356,27 +362,12 @@ int TmrCtrIntrExample(INTC *IntcInstancePtr,
 	 */
 	XTmrCtr_Start(TmrCtrInstancePtr, TmrCtrNumber);
 
-	while (1) {
-		/*
-		 * Wait for the first timer counter to expire as indicated
-		 * by the shared variable which the handler will increment
-		 */
-		while (TimerExpired == LastTimerExpired) {
-		}
-		LastTimerExpired = TimerExpired;
-
-		/*
-		 * If it has expired a number of times, then stop the
-		 * timer counter and stop this example
-		 */
-		if (TimerExpired == 3) {
-
-			XTmrCtr_Stop(TmrCtrInstancePtr, TmrCtrNumber);
-			break;
-		}
-	}
-
-	TmrCtrDisableIntr(IntcInstancePtr, IntrId);
+	/*
+	 * If it has expired a number of times, then stop the
+	 * timer counter and stop this example
+	 */
+//	XTmrCtr_Stop(TmrCtrInstancePtr, TmrCtrNumber);
+//	TmrCtrDisableIntr(IntcInstancePtr, IntrId);
 	return XST_SUCCESS;
 }
 
@@ -401,7 +392,26 @@ int TmrCtrIntrExample(INTC *IntcInstancePtr,
 ******************************************************************************/
 void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 {
-	XTmrCtr *InstancePtr = (XTmrCtr *)CallBackRef;
+//	XTmrCtr *InstancePtr = (XTmrCtr *)CallBackRef;
+
+//	TODO: handle displaying
+
+	if(enabled == 1){
+//		TODO: send to GPIO
+		if(++anode_n >= 4){
+			anode_n = 0;
+			enabled = 0;
+			cycle = 0;
+		}
+	} else {
+//		TODO: send to GPIO
+		if(++cycle > brightness){
+			cycle = 0;
+			enabled = 1;
+			anode_n = 0;
+		}
+	}
+
 
 	/*
 	 * Check if the timer counter has expired, checking is not necessary
@@ -410,12 +420,12 @@ void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 	 * of the timer counter that expired, increment a shared variable so
 	 * the main thread of execution can see the timer expired
 	 */
-	if (XTmrCtr_IsExpired(InstancePtr, TmrCtrNumber)) {
-		TimerExpired++;
-		if (TimerExpired == 3) {
-			XTmrCtr_SetOptions(InstancePtr, TmrCtrNumber, 0);
-		}
-	}
+//	if (XTmrCtr_IsExpired(InstancePtr, TmrCtrNumber)) {
+//		TimerExpired++;
+//		if (TimerExpired == 3) {
+//			XTmrCtr_SetOptions(InstancePtr, TmrCtrNumber, 0);
+//		}
+//	}
 }
 
 /*****************************************************************************/

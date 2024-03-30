@@ -2,18 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="exec" key="selection"/>
+		<item value="LED_CHANNEL" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="LED_CHANNEL"/>
+			<item value="GpioOutputExample"/>
+			<item value="Status"/>
+			<item value="GpioOutput"/>
+			<item value="XPAR_GPIO_0_DEVICE_ID"/>
+			<item value="GPIO_OUTPUT_DEVICE_ID"/>
+			<item value="axi_timer_0_Timer"/>
 			<item value="exec"/>
-			<item value="enabled"/>
-			<item value="TmrCtrDisableIntr"/>
-			<item value="TimerExpired"/>
-			<item value="TimerCounterHandler"/>
-			<item value="TmrCtrIntrExample"/>
 		</list>
 		<list key="replacehistory">
 		</list>
@@ -22,7 +24,7 @@
 		<item value="296" key="DIALOG_WIDTH"/>
 		<item value="1|Noto Sans|10.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		<item value="419" key="DIALOG_HEIGHT"/>
-		<item value="812" key="DIALOG_X_ORIGIN"/>
-		<item value="225" key="DIALOG_Y_ORIGIN"/>
+		<item value="1169" key="DIALOG_X_ORIGIN"/>
+		<item value="234" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
