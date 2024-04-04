@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="test_top_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="test_top" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="421855000fs"></ZoomStartTime>
+      <ZoomEndTime time="453455001fs"></ZoomEndTime>
+      <Cursor1Time time="434995000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="283"></NameColumnWidth>
+      <ValueColumnWidth column_width="110"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="23" />
+   <wvobject type="logic" fp_name="/test_top/topc/clk_i">
+      <obj_property name="ElementShortName">clk_i</obj_property>
+      <obj_property name="ObjectShortName">clk_i</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_top/topc/red_o">
+      <obj_property name="ElementShortName">red_o[3:0]</obj_property>
+      <obj_property name="ObjectShortName">red_o[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_top/topc/green_o">
+      <obj_property name="ElementShortName">green_o[3:0]</obj_property>
+      <obj_property name="ObjectShortName">green_o[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_top/topc/blue_o">
+      <obj_property name="ElementShortName">blue_o[3:0]</obj_property>
+      <obj_property name="ObjectShortName">blue_o[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/test_top/topc/hsync_o">
+      <obj_property name="ElementShortName">hsync_o</obj_property>
+      <obj_property name="ObjectShortName">hsync_o</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/test_top/topc/vsync_o">
+      <obj_property name="ElementShortName">vsync_o</obj_property>
+      <obj_property name="ObjectShortName">vsync_o</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_top/topc/sw_i">
+      <obj_property name="ElementShortName">sw_i[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sw_i[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_top/topc/btn_i">
+      <obj_property name="ElementShortName">btn_i[3:0]</obj_property>
+      <obj_property name="ObjectShortName">btn_i[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/test_top/topc/trx_clk">
+      <obj_property name="ElementShortName">trx_clk</obj_property>
+      <obj_property name="ObjectShortName">trx_clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_top/topc/wr_addr">
+      <obj_property name="ElementShortName">wr_addr[17:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_addr[17:0]</obj_property>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus88">
+      <obj_property name="label">wr_addr_x</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[8]">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">[8]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[7]">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">[7]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[6]">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">[6]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[5]">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">[5]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[4]">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">[4]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[3]">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">[3]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[2]">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">[2]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[1]">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">[1]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[0]">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus78">
+      <obj_property name="label">wr_addr_y</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[17]">
+         <obj_property name="ElementShortName">[17]</obj_property>
+         <obj_property name="ObjectShortName">[17]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[16]">
+         <obj_property name="ElementShortName">[16]</obj_property>
+         <obj_property name="ObjectShortName">[16]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[15]">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">[15]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[14]">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">[14]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[13]">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">[13]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[12]">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">[12]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[11]">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">[11]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[10]">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">[10]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/wr_addr[9]">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">[9]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_top/topc/pixel_addr">
+      <obj_property name="ElementShortName">pixel_addr[17:0]</obj_property>
+      <obj_property name="ObjectShortName">pixel_addr[17:0]</obj_property>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus50">
+      <obj_property name="label">pixel_addr_x</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[8]">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">[8]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[7]">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">[7]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[6]">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">[6]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[5]">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">[5]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[4]">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">[4]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[3]">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">[3]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[2]">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">[2]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[1]">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">[1]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[0]">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus40">
+      <obj_property name="label">pixel_addr_y</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[17]">
+         <obj_property name="ElementShortName">[17]</obj_property>
+         <obj_property name="ObjectShortName">[17]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[16]">
+         <obj_property name="ElementShortName">[16]</obj_property>
+         <obj_property name="ObjectShortName">[16]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[15]">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">[15]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[14]">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">[14]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[13]">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">[13]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[12]">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">[12]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[11]">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">[11]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[10]">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">[10]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/test_top/topc/pixel_addr[9]">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">[9]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="logic" fp_name="/test_top/topc/pixel_val">
+      <obj_property name="ElementShortName">pixel_val</obj_property>
+      <obj_property name="ObjectShortName">pixel_val</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/test_top/topc/write_signal">
+      <obj_property name="ElementShortName">write_signal</obj_property>
+      <obj_property name="ObjectShortName">write_signal</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/test_top/topc/transmitterc/v_counter">
+      <obj_property name="ElementShortName">v_counter</obj_property>
+      <obj_property name="ObjectShortName">v_counter</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/test_top/topc/transmitterc/h_counter">
+      <obj_property name="ElementShortName">h_counter</obj_property>
+      <obj_property name="ObjectShortName">h_counter</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/test_top/topc/transmitterc/h_state">
+      <obj_property name="ElementShortName">h_state</obj_property>
+      <obj_property name="ObjectShortName">h_state</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/test_top/topc/transmitterc/v_state">
+      <obj_property name="ElementShortName">v_state</obj_property>
+      <obj_property name="ObjectShortName">v_state</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_top/topc/x_val">
+      <obj_property name="ElementShortName">x_val[10:0]</obj_property>
+      <obj_property name="ObjectShortName">x_val[10:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_top/topc/y_val">
+      <obj_property name="ElementShortName">y_val[10:0]</obj_property>
+      <obj_property name="ObjectShortName">y_val[10:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

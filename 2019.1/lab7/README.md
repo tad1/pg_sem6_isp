@@ -1,4 +1,6 @@
-
+**Vivado SDK** (the stuff for writing software for hardware)**don't exists since** version **2019.2** (**2019.1** is the last one that **have SDK**); in later version Xilinx divided it into:
+- Vivado (for hardware)
+- and Vitis (for software)
 ## GPIO
 ```c
 void initialization(){
