@@ -206,7 +206,7 @@ begin
 	process
 	begin
 	 wait until rising_edge(clk_i);
-	 if (btn_i(2) = '1') then
+	 if (btn_i(1) = '1') then
 	   a_amplitude <= to_integer(unsigned(sw_i(7 downto 4))) * 16;
 	   b_amplitude <= to_integer(unsigned(sw_i(3 downto 0))) * 4;
 	 end if;
@@ -232,5 +232,5 @@ begin
 	end process;
 
     -- TODO: add logic for 
-    gen_reset <= btn_i(0) or btn_i(1) or btn_i(2) or btn_i(3);
+    gen_reset <= btn_i(0) or btn_i(1);
 end Behavioral;
