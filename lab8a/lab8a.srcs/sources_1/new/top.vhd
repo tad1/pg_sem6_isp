@@ -137,15 +137,15 @@ signal y_sin : STD_LOGIC_VECTOR(10 downto 0);
 signal y_cos : STD_LOGIC_VECTOR(10 downto 0);
 
 
-signal a_amplitude : integer;
-signal b_amplitude : integer;
+signal a_amplitude : integer range 0 to 240 := 80;
+signal b_amplitude : integer range 0 to 60 := 20;
 
 signal gen_reset : STD_LOGIC := '0';
 
-signal x1 : integer;
-signal x2 : integer;
-signal y1 : integer;
-signal y2 : integer;
+signal x1 : integer range  -240 to 240;
+signal x2 : integer range -60 to 60;
+signal y1 : integer range -240 to 240;
+signal y2 : integer range -60 to 60;
 
 type CalcState is (parts, full);
 signal state : CalcState := parts;
@@ -216,14 +216,14 @@ begin
 	begin
 		wait until rising_edge(clk_i);
 		if (gen_ready = '1') and state = parts then
-			x1 <= sine_to_int(x_cos, a_amplitude) + 192;
-			x2 <= sine_to_int(y_cos, b_amplitude) + 192;
-			y1 <= sine_to_int(x_sin, a_amplitude) + 192;
-			y2 <= sine_to_int(y_sin, b_amplitude) + 192;
+			x1 <= sine_to_int(x_cos, a_amplitude);
+			x2 <= sine_to_int(y_cos, b_amplitude);
+			y1 <= sine_to_int(x_sin, a_amplitude);
+			y2 <= sine_to_int(y_sin, b_amplitude);
 			state <= full;
 		elsif (state = full) then
             write_signal <= not write_signal;
-			wr_addr <= std_logic_vector(to_unsigned(((x1 - x2) * 384) + (y1 - y2), 18));
+			wr_addr <= std_logic_vector(to_unsigned(((x1 - x2 + 192) * 384) + (y1 - y2 + 192), 18));
 		    state <= parts;
 		end if;
 		
