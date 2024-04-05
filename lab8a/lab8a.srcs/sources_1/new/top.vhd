@@ -22,8 +22,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.STD_LOGIC_SIGNED.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -44,17 +42,28 @@ entity top is
            btn_i : in STD_LOGIC_VECTOR (3 downto 0));
 end top;
 
+
 architecture Behavioral of top is
+
+pure function sine_to_int (
+    fix_val : STD_LOGIC_VECTOR(10 downto 0);
+    amplitude: integer
+) return integer is
+begin
+    return (to_integer(signed(fix_val)) * amplitude) / (2 ** (fix_val'length - 1));
+end function;
+
 component generator is
     Port ( 
     		clk : in STD_LOGIC;
     		value : in STD_LOGIC_VECTOR (7 downto 0);
            	x_freq_set : in STD_LOGIC;
            	y_freq_set : in STD_LOGIC;
-           	y_offset_set : in STD_LOGIC;
            	areset : in STD_LOGIC;
-           	x_val : out STD_LOGIC_VECTOR (10 downto 0);
-           	y_val : out STD_LOGIC_VECTOR (10 downto 0);
+           	x_sin : out STD_LOGIC_VECTOR (10 downto 0);
+            x_cos : out STD_LOGIC_VECTOR (10 downto 0);
+           	y_sin : out STD_LOGIC_VECTOR (10 downto 0);
+            y_cos : out STD_LOGIC_VECTOR (10 downto 0);
            	ready: out STD_LOGIC
            );
 end component;
@@ -122,10 +131,24 @@ signal write_signal :STD_LOGIC := '0';
 signal write_pulse : STD_LOGIC := '0';
 signal gen_ready : STD_LOGIC := '0';
 
-signal x_val : STD_LOGIC_VECTOR(10 downto 0);
-signal y_val : STD_LOGIC_VECTOR(10 downto 0);
+signal x_sin : STD_LOGIC_VECTOR(10 downto 0);
+signal x_cos : STD_LOGIC_VECTOR(10 downto 0);
+signal y_sin : STD_LOGIC_VECTOR(10 downto 0);
+signal y_cos : STD_LOGIC_VECTOR(10 downto 0);
+
+
+signal a_amplitude : integer;
+signal b_amplitude : integer;
 
 signal gen_reset : STD_LOGIC := '0';
+
+signal x1 : integer;
+signal x2 : integer;
+signal y1 : integer;
+signal y2 : integer;
+
+type CalcState is (parts, full);
+signal state : CalcState := parts;
 
 begin
 	trx_clkc : clk_div 
@@ -172,24 +195,38 @@ begin
 		value => sw_i,
 		x_freq_set => btn_i(3),
 		y_freq_set => btn_i(2),
-		y_offset_set => '0',
 		areset => gen_reset,
-		x_val => x_val,
-		y_val => y_val,
+		x_sin => x_sin,
+		x_cos => x_cos,
+		y_sin => y_sin,
+		y_cos => y_cos,
 		ready => gen_ready
 	);
 	
+	process
+	begin
+	 wait until rising_edge(clk_i);
+	 if (btn_i(2) = '1') then
+	   a_amplitude <= to_integer(unsigned(sw_i(7 downto 4))) * 16;
+	   b_amplitude <= to_integer(unsigned(sw_i(3 downto 0))) * 4;
+	 end if;
+	end process;
+	
 	process 
-	variable y : integer;
-	variable x : integer;
 	begin
 		wait until rising_edge(clk_i);
-		if (gen_ready = '1') then
-			write_signal <= not write_signal;
-			x := conv_integer(x_val(10 downto 3));
-			y := conv_integer(y_val(10 downto 3));
-			wr_addr <= CONV_STD_LOGIC_VECTOR((x + 384 / 2) * 384 + y + 384 / 2, 18);
+		if (gen_ready = '1') and state = parts then
+			x1 <= sine_to_int(x_cos, a_amplitude);
+			x2 <= sine_to_int(y_cos, b_amplitude);
+			y1 <= sine_to_int(x_sin, a_amplitude);
+			y2 <= sine_to_int(y_sin, b_amplitude);
+		elsif (state = full) then
+            write_signal <= not write_signal;
+			wr_addr <= std_logic_vector(to_unsigned(((x1 - x2 + 192) * 384) + (y1 - y2 + 192), 18));
 		end if;
+		
+		
+		
 	end process;
 
     -- TODO: add logic for 

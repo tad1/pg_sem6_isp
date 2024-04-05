@@ -37,10 +37,11 @@ entity generator is
     		value : in STD_LOGIC_VECTOR (7 downto 0);
            	x_freq_set : in STD_LOGIC;
            	y_freq_set : in STD_LOGIC;
-           	y_offset_set : in STD_LOGIC;
            	areset : in STD_LOGIC;
-           	x_val : out STD_LOGIC_VECTOR (10 downto 0);
-           	y_val : out STD_LOGIC_VECTOR (10 downto 0);
+           	x_sin : out STD_LOGIC_VECTOR (10 downto 0);
+            x_cos : out STD_LOGIC_VECTOR (10 downto 0);
+           	y_sin : out STD_LOGIC_VECTOR (10 downto 0);
+            y_cos : out STD_LOGIC_VECTOR (10 downto 0);
            	ready: out STD_LOGIC
            );
 end generator;
@@ -52,19 +53,19 @@ architecture Behavioral of generator is
 		aclken : IN STD_LOGIC;
 		aresetn : IN STD_LOGIC;
 		s_axis_config_tvalid : IN STD_LOGIC;
-		s_axis_config_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		s_axis_config_tdata : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
 		s_axis_config_tlast : IN STD_LOGIC;
 		m_axis_data_tvalid : OUT STD_LOGIC;
-		m_axis_data_tdata : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+		m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		event_s_config_tlast_missing : OUT STD_LOGIC;
 		event_s_config_tlast_unexpected : OUT STD_LOGIC
 	  );
 	END COMPONENT;
 	type GeneratorState is (reset, speeding, ready_x, ready_y, config1, config2);
 	signal state : GeneratorState := speeding;
-	signal raw_data : STD_LOGIC_VECTOR(10 downto 0);
+	signal raw_data : STD_LOGIC_VECTOR(31 downto 0);
 	signal unused : STD_LOGIC_VECTOR(15 downto 11);
-	signal settings : STD_LOGIC_VECTOR(31 downto 0);
+	signal settings : STD_LOGIC_VECTOR(15 downto 0);
 	
 	signal x_freq : STD_LOGIC_VECTOR(7 downto 0) := "11110000";
 	signal x_offset : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
@@ -87,8 +88,7 @@ begin
     s_axis_config_tdata => settings,
     s_axis_config_tlast => config_last,
     m_axis_data_tvalid => raw_data_valid,
-    m_axis_data_tdata(15 downto 11) => unused,
-    m_axis_data_tdata(10 downto 0) => raw_data,
+    m_axis_data_tdata => raw_data,
     event_s_config_tlast_missing => open,
     event_s_config_tlast_unexpected => open
   );
@@ -104,32 +104,33 @@ begin
   		when speeding =>
   			rst <= '1';
   			if(raw_data_valid = '1') then
-				x_val <= raw_data;
+				x_sin <= raw_data(26 downto 16);
+				x_cos <= raw_data(10 downto 0);
   				state <= ready_y;
   			end if;
   		when ready_x =>
   			if(raw_data_valid = '1') then
-				x_val <= raw_data;
+                x_sin <= raw_data(26 downto 16);
+				x_cos <= raw_data(10 downto 0);
   				state <= ready_y;
   				ready <= '0';
   			end if;
   		when ready_y =>
   			if(raw_data_valid = '1') then
-				y_val <= raw_data;
+                y_sin <= raw_data(26 downto 16);
+				y_cos <= raw_data(10 downto 0);
 	  			state <= ready_x;
 	  			ready <= '1';
 	  		end if;
   		when config1 =>
   			state <= config2;
   			config_valid <= '1';
-  			settings(31 downto 24) <= x_offset;
-			settings(23 downto 8) <= (others => '0');
+			settings(15 downto 8) <= (others => '0');
   			settings(7 downto 0) <= x_freq;
   		when config2 =>
   			state <= reset;
   			config_last <= '1';
-			settings(31 downto 24) <= y_offset;
-			settings(23 downto 8) <= (others => '0');
+			settings(15 downto 8) <= (others => '0');
   			settings(7 downto 0) <= y_freq;
   		
   		-- TODO: assert, not in config??
@@ -141,9 +142,6 @@ begin
   	end if;
   	if (y_freq_set = '1') then
   		y_freq <= value;
-  	end if;
-  	if (y_offset_set = '1') then
-  		y_offset <= value;
   	end if;
   	
 	if(areset = '1' and state /= config1 and state /= config2 and state /= reset) then
