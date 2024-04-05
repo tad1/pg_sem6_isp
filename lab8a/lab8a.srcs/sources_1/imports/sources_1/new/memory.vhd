@@ -39,8 +39,7 @@ architecture Behavioral of memory is
 	END COMPONENT;
 	type MemoryState is (working, clearing);
 	signal state : MemoryState := clearing;
-	signal clr_x : integer := 0;
-	signal clr_y : integer := 0;
+	signal clr_pos : integer := 0;
 	signal int_write_data : STD_LOGIC := '0';
 	signal int_write_addr : STD_LOGIC_VECTOR(17 DOWNTO 0);
 	signal int_write_enable : STD_LOGIC := '0';
@@ -54,17 +53,12 @@ begin
 					state <= clearing;
 				end if;
 			when clearing =>
-				if(clr_x + 1 >= x_size) then
-					clr_x <= 0;
-					if(clr_y + 1 >= y_size) then
-						clr_y <= 0;
-						state <= working;
-						busy <= '0';
-					else
-						clr_y <= clr_y + 1;
-					end if;
+				if(clr_pos + 1 >= x_size * y_size) then
+					clr_pos <= 0;
+                    state <= working;
+                    busy <= '0';
 				else
-					clr_x <= clr_x + 1;
+					clr_pos <= clr_pos + 1;
 				end if;
 		end case;
 	end process;
@@ -81,7 +75,7 @@ begin
 	  
 	  int_write_data <= '0' when state = clearing else '1';
 	  int_write_enable <= '1' when state = clearing else w_en;
-	  int_write_addr <= std_logic_vector(to_unsigned(clr_y, 9)) & std_logic_vector(to_unsigned(clr_x, 9)) when state = clearing else w_addr; 
+	  int_write_addr <= std_logic_vector(to_unsigned(clr_pos, 18)) when state = clearing else w_addr; 
 	  
 	
 end Behavioral;
