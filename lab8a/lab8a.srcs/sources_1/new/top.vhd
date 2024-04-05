@@ -216,13 +216,15 @@ begin
 	begin
 		wait until rising_edge(clk_i);
 		if (gen_ready = '1') and state = parts then
-			x1 <= sine_to_int(x_cos, a_amplitude);
-			x2 <= sine_to_int(y_cos, b_amplitude);
-			y1 <= sine_to_int(x_sin, a_amplitude);
-			y2 <= sine_to_int(y_sin, b_amplitude);
+			x1 <= sine_to_int(x_cos, a_amplitude) + 192;
+			x2 <= sine_to_int(y_cos, b_amplitude) + 192;
+			y1 <= sine_to_int(x_sin, a_amplitude) + 192;
+			y2 <= sine_to_int(y_sin, b_amplitude) + 192;
+			state <= full;
 		elsif (state = full) then
             write_signal <= not write_signal;
-			wr_addr <= std_logic_vector(to_unsigned(((x1 - x2 + 192) * 384) + (y1 - y2 + 192), 18));
+			wr_addr <= std_logic_vector(to_unsigned(((x1 - x2) * 384) + (y1 - y2), 18));
+		    state <= parts;
 		end if;
 		
 		
