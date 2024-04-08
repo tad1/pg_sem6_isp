@@ -1,12 +1,12 @@
 # Simple Makefile
 TARGET = johnson
 SYSTEMC = /usr/local/systemc-2.2
-INCDIR = -I. -I/usr/local/systemc-2.2/include
-LIBDIR = -L. -L/usr/local/systemc-2.2/lib-cygwin
+INCDIR = -I. -I/usr/local/systemc-2.2/include -I/usr/include
+LIBDIR = -L. -L/usr/local/systemc-2.2/lib-cygwin -L/usr/lib
 LIBS   = -lsystemc -lm
 
 CC     = g++
-CFLAGS = -g -Wno-deprecated -Wall -std=c++98 -O0 -fpermissive
+CFLAGS = -g -Wno-deprecated -Wall -std=c++11 -O0 -fpermissive
 
 OBJS   = testbench.o
 
