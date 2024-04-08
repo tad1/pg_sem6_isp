@@ -79,14 +79,15 @@ int sc_main (int argc, char* argv[]) {
   }
   sc_start(4, sc_core::SC_MS );
 
-  reset.write(1);
-  sc_start(10, SC_NS);
-  reset.write(0);
-  for (int i = nbits-1; i >= 0; i--) {
-      RDX.write(transmission.get_bit(i));
-      sc_start(83.33, SC_US); //1/9600 * 0.80 sec
-  }
-  sc_start(4, sc_core::SC_MS );
+  // this gives segfault for some reason
+  // reset.write(1);
+  // sc_start(10, SC_NS);
+  // reset.write(0);
+  // for (int i = nbits-1; i >= 0; i--) {
+  //     RDX.write(transmission.get_bit(i));
+  //     sc_start(83.33, SC_US); //1/9600 * 0.80 sec
+  // }
+  // sc_start(4, sc_core::SC_MS );
 
 
   cout << "@" << sc_time_stamp() <<" Terminating simulation\n" << endl;

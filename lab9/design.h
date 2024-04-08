@@ -143,6 +143,9 @@ SC_MODULE(uar){
   void start_of_simulation(){
     data_l->write(0x0);
     data_h->write(0x0);
+    tick = 0;
+    nbit = 0;
+    prev_value = 0;
   }
 
   void uar_process(){
@@ -201,9 +204,7 @@ SC_MODULE(uar){
 
   typedef uar SC_CURRENT_USER_MODULE;
   uar(sc_module_name name, int sampling_rate) : sc_module(name), sampling_rate(sampling_rate), sampling_tick(sampling_rate/2){
-    tick = 0;
-    nbit = 0;
-    prev_value = 0;
+
     SC_METHOD(uar_process)
     sensitive << clk_i << rst_i;
   }
