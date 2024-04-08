@@ -86,7 +86,6 @@ int sc_main (int argc, char* argv[]) {
       RDX.write(transmission.get_bit(i));
       sc_start(83.33, SC_US); //1/9600 * 0.80 sec
   }
-  sc_start(4, SC_MS);
 
   cout << "@" << sc_time_stamp() <<" Terminating simulation\n" << endl;
   sc_close_vcd_trace_file(wf);
