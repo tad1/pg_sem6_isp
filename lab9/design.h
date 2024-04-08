@@ -100,7 +100,7 @@ SC_MODULE(display) {
 
   void display_process(){
     if(disp_clk.posedge()){
-      current_an = current_an = 3 ? current_an + 1: 0;
+      current_an = ++current_an % 4;
       led7_an_o = an_vals[current_an];
       led7_seg_o = digit_i->read().range((current_an+1) * 8 - 1, current_an * 8);
     }
