@@ -16,8 +16,8 @@
 #include <sysc/kernel/sc_process.h>
 
 SC_MODULE (hex2seg){
-    sc_in<sc_lv<4>> hex_i;
-    sc_out<sc_lv<8>> seg_o;
+    sc_in<sc_lv<4> > hex_i;
+    sc_out<sc_lv<8> > seg_o;
     sc_lv<8> seg_vals[16] = {
       "00000011",
       "10011111",
@@ -81,9 +81,9 @@ SC_MODULE(clk_div){
 SC_MODULE(display) {
   sc_in_clk clk_i;
   sc_in<bool> rst_i;
-  sc_in<sc_lv<32>> digit_i;
-  sc_out<sc_lv<4>> led7_an_o;
-  sc_out<sc_lv<8>> led7_seg_o;
+  sc_in<sc_lv<32> > digit_i;
+  sc_out<sc_lv<4> > led7_an_o;
+  sc_out<sc_lv<8> > led7_seg_o;
   sc_signal<bool> disp_clk;
 
   int current_an = 0;
@@ -122,7 +122,7 @@ SC_MODULE(uar){
   sc_in<bool> rst_i;
   sc_in<bool> RXD_i;
   sc_out<bool> ready_o;
-  sc_out<sc_lv<8>> data_o;
+  sc_out<sc_lv<8> > data_o;
 
   int tick = 0;
   int nbit = 0;
@@ -194,19 +194,19 @@ SC_MODULE(top){
   sc_in_clk clk_i;
   sc_in<bool> rst_i;
   sc_in<bool> RXD_i;
-  sc_out<sc_lv<4>> led7_an_o;
-  sc_out<sc_lv<8>> led7_seg_o;
+  sc_out<sc_lv<4> > led7_an_o;
+  sc_out<sc_lv<8> > led7_seg_o;
 
   sc_signal<bool> uar_clk;
   sc_signal<bool> ready;
-  sc_signal<sc_lv<8>> uar_data;
-  sc_signal<sc_lv<4>> latch_data_l;
-  sc_signal<sc_lv<4>> latch_data_h;
+  sc_signal<sc_lv<8> > uar_data;
+  sc_signal<sc_lv<4> > latch_data_l;
+  sc_signal<sc_lv<4> > latch_data_h;
   
-  sc_signal<sc_lv<8>> disp_seg0;
-  sc_signal<sc_lv<8>> disp_seg1;
+  sc_signal<sc_lv<8> > disp_seg0;
+  sc_signal<sc_lv<8> > disp_seg1;
   sc_lv<16> disp_seg_unused = 0xFFFF;
-  sc_signal<sc_lv<32>> disp_seg_full;
+  sc_signal<sc_lv<32> > disp_seg_full;
 
   sc_signal<bool> disp_rst;
 
