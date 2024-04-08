@@ -11,8 +11,8 @@ int sc_main (int argc, char* argv[]) {
   sc_signal<bool>   clock;
   sc_signal<bool>   reset;
   sc_signal<bool> RXD;
-  sc_signal<sc_lv<4>> led7_an;
-  sc_signal<sc_lv<8>> led7_seg;
+  sc_signal<sc_lv<4> > led7_an;
+  sc_signal<sc_lv<8> > led7_seg;
   int i = 0;
   // Connect the DUT
   top topc("top");
