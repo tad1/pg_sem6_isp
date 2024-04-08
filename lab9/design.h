@@ -131,9 +131,9 @@ SC_MODULE(uar){
   sc_out<sc_lv<4> > data_l;
   sc_out<sc_lv<4> > data_h;
 
-  int tick = 0;
-  int nbit = 0;
-  bool prev_value = 0;
+  int tick;
+  int nbit;
+  bool prev_value;
   int sampling_tick;
   int sampling_rate;
 
@@ -201,7 +201,9 @@ SC_MODULE(uar){
 
   typedef uar SC_CURRENT_USER_MODULE;
   uar(sc_module_name name, int sampling_rate) : sc_module(name), sampling_rate(sampling_rate), sampling_tick(sampling_rate/2){
-
+    tick = 0;
+    nbit = 0;
+    prev_value = 0;
     SC_METHOD(uar_process)
     sensitive << clk_i << rst_i;
   }
