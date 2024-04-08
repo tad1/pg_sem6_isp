@@ -18,7 +18,7 @@ int sc_main (int argc, char* argv[]) {
   sc_signal<sc_lv<8> > led7_seg;
   
   const int nbits = 11;
-  sc_lv<11> transmission = "10110010101";
+  sc_bv<11> transmission = "10110010101";
 
   // Connect the DUT
   top topc("top");
@@ -59,19 +59,25 @@ int sc_main (int argc, char* argv[]) {
       RDX.write(transmission.get_bit(i));
       sc_start(104.16, SC_US); //1/9600 sec
   }
+  sc_start(4, sc_core::SC_MS );
+
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(100, SC_US); //1/9600 * 0.96 sec
   }
+  sc_start(4, sc_core::SC_MS );
+
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(108.32, SC_US); //1/9600 * 1.04 sec
   }
+  sc_start(4, sc_core::SC_MS );
 
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(145.82, SC_US); //1/9600 * 1.40 sec
   }
+  sc_start(4, sc_core::SC_MS );
 
   reset.write(1);
   sc_start(10, SC_NS);
@@ -80,7 +86,8 @@ int sc_main (int argc, char* argv[]) {
       RDX.write(transmission.get_bit(i));
       sc_start(83.33, SC_US); //1/9600 * 0.80 sec
   }
-  sc_start(100, SC_NS);
+  sc_start(4, sc_core::SC_MS );
+
 
   cout << "@" << sc_time_stamp() <<" Terminating simulation\n" << endl;
   sc_close_vcd_trace_file(wf);
