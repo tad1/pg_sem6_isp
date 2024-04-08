@@ -55,11 +55,13 @@ int sc_main (int argc, char* argv[]) {
   sc_start(10, SC_NS);
 
 
+  cout << "@" << sc_time_stamp() <<" 1st transmission\n" << endl;
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(104.16, SC_US); //1/9600 sec
   }
   sc_start(4, SC_MS);
+  cout << "@" << sc_time_stamp() <<" 2nd transmission\n" << endl;
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(100, SC_US); //1/9600 * 0.96 sec
@@ -70,6 +72,7 @@ int sc_main (int argc, char* argv[]) {
       sc_start(108.32, SC_US); //1/9600 * 1.04 sec
   }
   sc_start(4, SC_MS);
+  cout << "@" << sc_time_stamp() <<"3rd transmission\n" << endl;
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(145.82, SC_US); //1/9600 * 1.40 sec
@@ -78,6 +81,7 @@ int sc_main (int argc, char* argv[]) {
   reset.write(1);
   sc_start(10, SC_NS);
   reset.write(0);
+  cout << "@" << sc_time_stamp() <<"4th transmission\n" << endl;
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(83.33, SC_US); //1/9600 * 0.80 sec
