@@ -109,7 +109,6 @@ SC_MODULE(display) {
   SC_CTOR(display){
       clk_divc->clk_i(clk_i);
       clk_divc->clk_o(disp_clk);
-      led7_seg_o->write(0x0);
       
       SC_METHOD(display_process);
       sensitive << disp_clk << rst_i;
@@ -239,10 +238,11 @@ SC_MODULE(top){
 
     dispc->clk_i(clk_i);
     dispc->rst_i(disp_rst);    
-    disp_rst.write(0);
     dispc->digit_i(disp_seg_full);
     dispc->led7_an_o(led7_an_o);
     dispc->led7_seg_o(led7_seg_o);
+    
+    disp_rst.write(0);
 
     hexc1->hex_i(latch_data_l);
     hexc1->seg_o(disp_seg0);
