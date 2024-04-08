@@ -38,7 +38,8 @@ int sc_main (int argc, char* argv[]) {
   sc_trace(wf, RDX, "RDX");
   sc_trace(wf, led7_an, "led7_an");
   sc_trace(wf, led7_seg, "led7_seg");
-  sc_trace(wf, topc.uar_data, "uar_data");
+  sc_trace(wf, topc.uar_data_l, "uar_data");
+  sc_trace(wf, topc.uar_data_h, "uar_data");
   sc_trace(wf, topc.ready, "ready");
   sc_trace(wf, topc.uar_clk, "uar_clk");
   sc_trace(wf, topc.disp_seg_full, "disp_seg_full");
