@@ -28,7 +28,16 @@ int sc_main (int argc, char* argv[]) {
   topc.led7_an_o(led7_an);
   topc.led7_seg_o(led7_seg);
 
-  sc_start(100, SC_NS);
+  sc_start(1, SC_NS);
+
+  // Open VCD file
+  sc_trace_file *wf = sc_create_vcd_trace_file("lab4");
+  // Dump the desired signals
+  sc_trace(wf, clock, "clock");
+  sc_trace(wf, reset, "reset");
+  sc_trace(wf, led7_an, "led7_an");
+  sc_trace(wf, led7_seg, "led7_seg");
+
   cout << "@" << sc_time_stamp() <<" Starting simulation\n" << endl;
 
   sc_start(5, SC_NS);
@@ -66,6 +75,6 @@ int sc_main (int argc, char* argv[]) {
   sc_start(100, SC_NS);
 
   cout << "@" << sc_time_stamp() <<" Terminating simulation\n" << endl;
-  // sc_close_vcd_trace_file(wf);
+  sc_close_vcd_trace_file(wf);
   return 0;// Terminate simulation
 }
