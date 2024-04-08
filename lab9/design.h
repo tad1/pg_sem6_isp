@@ -109,6 +109,7 @@ SC_MODULE(display) {
   SC_CTOR(display){
       clk_divc->clk_i(clk_i);
       clk_divc->clk_o(disp_clk);
+      led7_seg_o = 0x00;
       
       SC_METHOD(display_process);
       sensitive << disp_clk << rst_i;
@@ -184,6 +185,7 @@ SC_MODULE(uar){
   typedef uar SC_CURRENT_USER_MODULE;
   uar(sc_module_name name, int sampling_rate) : sc_module(name), sampling_rate(sampling_rate), sampling_tick(sampling_rate/2){
 
+    data_o->write(0x00);
     SC_METHOD(uar_process)
     sensitive << clk_i << rst_i;
   }
@@ -242,7 +244,8 @@ SC_MODULE(top){
     dispc->led7_an_o(led7_an_o);
     dispc->led7_seg_o(led7_seg_o);
     
-    disp_rst.write(0);
+    disp_seg_full = 0xFFFF0000;
+    disp_rst = 0;
 
     hexc1->hex_i(latch_data_l);
     hexc1->seg_o(disp_seg0);
