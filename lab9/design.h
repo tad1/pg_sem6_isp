@@ -100,7 +100,7 @@ SC_MODULE(display) {
 
   void display_process(){
     if(disp_clk.posedge()){
-      current_an = current_an = 4 ? current_an + 1: 0;
+      current_an = current_an = 3 ? current_an + 1: 0;
       led7_an_o = an_vals[current_an];
       led7_seg_o = digit_i->read().range((current_an+1) * 8 - 1, current_an * 8);
     }
@@ -109,6 +109,7 @@ SC_MODULE(display) {
   SC_CTOR(display){
       clk_divc->clk_i(clk_i);
       clk_divc->clk_o(disp_clk);
+      led7_seg_o->write(0x0);
       
       SC_METHOD(display_process);
       sensitive << disp_clk << rst_i;

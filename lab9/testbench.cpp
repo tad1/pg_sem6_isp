@@ -41,6 +41,7 @@ int sc_main (int argc, char* argv[]) {
   sc_trace(wf, topc.uar_data, "uar_data");
   sc_trace(wf, topc.ready, "ready");
   sc_trace(wf, topc.uar_clk, "uar_clk");
+  sc_trace(wf, topc.disp_seg_full, "disp_seg_full");
 
   cout << "@" << sc_time_stamp() <<" Starting simulation\n" << endl;
 
