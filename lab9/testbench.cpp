@@ -38,13 +38,10 @@ int sc_main (int argc, char* argv[]) {
   sc_trace(wf, RDX, "RDX");
   sc_trace(wf, led7_an, "led7_an");
   sc_trace(wf, led7_seg, "led7_seg");
-  sc_trace(wf, topc.uar_data_l, "uar_data");
-  sc_trace(wf, topc.uar_data_h, "uar_data");
   sc_trace(wf, topc.ready, "ready");
   sc_trace(wf, topc.uar_clk, "uar_clk");
-  sc_trace(wf, topc.disp_seg_full, "disp_seg_full");
-  sc_trace(wf, topc.uar_data_h, "latch_h");
-  sc_trace(wf, topc.uar_data_l, "latch_l");
+  sc_trace(wf, topc.uar_data_h, "uar_data_h");
+  sc_trace(wf, topc.uar_data_l, "uar_data_l");
   sc_trace(wf, topc.disp_seg0, "dis_seg0");
   sc_trace(wf, topc.disp_seg1, "dis_seg1");
   sc_trace(wf, topc.dispc->digit_i, "disp_digit");
@@ -62,20 +59,22 @@ int sc_main (int argc, char* argv[]) {
       RDX.write(transmission.get_bit(i));
       sc_start(104.16, SC_US); //1/9600 sec
   }
+  sc_start(4, SC_MS);
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(100, SC_US); //1/9600 * 0.96 sec
   }
+  sc_start(4, SC_MS);
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(108.32, SC_US); //1/9600 * 1.04 sec
   }
-
+  sc_start(4, SC_MS);
   for (int i = nbits-1; i >= 0; i--) {
       RDX.write(transmission.get_bit(i));
       sc_start(145.82, SC_US); //1/9600 * 1.40 sec
   }
-
+  sc_start(4, SC_MS);
   reset.write(1);
   sc_start(10, SC_NS);
   reset.write(0);
@@ -83,7 +82,7 @@ int sc_main (int argc, char* argv[]) {
       RDX.write(transmission.get_bit(i));
       sc_start(83.33, SC_US); //1/9600 * 0.80 sec
   }
-  sc_start(100, SC_NS);
+  sc_start(4, SC_MS);
 
   cout << "@" << sc_time_stamp() <<" Terminating simulation\n" << endl;
   sc_close_vcd_trace_file(wf);
