@@ -126,7 +126,10 @@ SC_MODULE(uar){
   sc_in<bool> rst_i;
   sc_in<bool> RXD_i;
   sc_out<bool> ready_o;
-  sc_out<sc_lv<8> > data_o;
+
+  // splitted into 2 distinct signals.. because I have no other idea how I can split that without adding delay
+  sc_out<sc_lv<4> > data_l;
+  sc_out<sc_lv<4> > data_h;
 
   int tick = 0;
   int nbit = 0;
@@ -138,7 +141,8 @@ SC_MODULE(uar){
   uar_state current_state;
 
   void start_of_simulation(){
-    data_o->write(0x00);
+    data_l->write(0x0);
+    data_h->write(0x0);
   }
 
   void uar_process(){
@@ -171,9 +175,15 @@ SC_MODULE(uar){
           case data:{
             tick += 1;
             if(tick == sampling_tick){
-              sc_lv<8> tmp = data_o->read();
-              tmp[nbit] = RXD_i->read();
-              data_o = tmp;
+              if(nbit >= 4){
+                sc_lv<4> tmp = data_h->read();
+                tmp[nbit-4] = RXD_i->read();
+                data_h = tmp;
+              } else{
+                sc_lv<4> tmp = data_l->read();
+                tmp[nbit] = RXD_i->read();
+                data_l = tmp;
+              }
               nbit += 1;
             } else if (tick == sampling_rate) {
               tick = 0;
@@ -207,9 +217,8 @@ SC_MODULE(top){
 
   sc_signal<bool> uar_clk;
   sc_signal<bool> ready;
-  sc_signal<sc_lv<8> > uar_data;
-  sc_signal<sc_lv<4> > latch_data_l;
-  sc_signal<sc_lv<4> > latch_data_h;
+  sc_signal<sc_lv<4> > uar_data_l;
+  sc_signal<sc_lv<4> > uar_data_h;
   
   sc_signal<sc_lv<8> > disp_seg0;
   sc_signal<sc_lv<8> > disp_seg1;
@@ -226,11 +235,7 @@ SC_MODULE(top){
 
   void top_process(){
     if(ready.posedge()){
-      latch_data_h = uar_data.read().range(7, 4);
-      latch_data_l = uar_data.read().range(3, 0);
-
       disp_seg_full = (disp_seg_unused, disp_seg1.read(), disp_seg0.read());
-
     }
   }
 
@@ -247,7 +252,8 @@ SC_MODULE(top){
     uarc->rst_i(rst_i);
     uarc->RXD_i(RXD_i);
     uarc->ready_o(ready);
-    uarc->data_o(uar_data);
+    uarc->data_h(uar_data_h);
+    uarc->data_l(uar_data_l);
 
     dispc->clk_i(clk_i);
     dispc->rst_i(disp_rst);    
@@ -255,10 +261,10 @@ SC_MODULE(top){
     dispc->led7_an_o(led7_an_o);
     dispc->led7_seg_o(led7_seg_o);
 
-    hexc1->hex_i(latch_data_l);
+    hexc1->hex_i(uar_data_l);
     hexc1->seg_o(disp_seg0);
 
-    hexc2->hex_i(latch_data_h);
+    hexc2->hex_i(uar_data_h);
     hexc2->seg_o(disp_seg1);
 
     SC_METHOD(top_process);
