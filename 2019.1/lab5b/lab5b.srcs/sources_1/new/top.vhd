@@ -25,8 +25,6 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.STD_LOGIC_SIGNED.ALL;
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
@@ -133,6 +131,14 @@ signal write_pulse : STD_LOGIC := '0';
 signal x_val : STD_LOGIC_VECTOR(10 downto 0);
 signal y_val : STD_LOGIC_VECTOR(10 downto 0);
 
+pure function sine_to_int (
+    fix_val : STD_LOGIC_VECTOR(10 downto 0);
+    amplitude: integer
+) return integer is
+begin
+    return (to_integer(signed(fix_val)) * amplitude) / (2 ** (fix_val'length - 1));
+end function;
+
 begin
 	trx_clkc : clk_div 
 	Generic map(
@@ -192,9 +198,9 @@ begin
 		wait until rising_edge(clk_i);
 		if (gen_ready = '1') then
 			write_signal <= not write_signal;
-			x := conv_integer(x_val(10 downto 3));
-			y := conv_integer(y_val(10 downto 3));
-			wr_addr <= CONV_STD_LOGIC_VECTOR(((x + 192) * 384) + (y + 192), 18);
+			x := sine_to_int(x_val, 192);
+			y := sine_to_int(y_val, 192);
+			wr_addr <= std_logic_vector(to_unsigned(((x + 192) * 384) + (y + 192), 18));
 		end if;
 	end process;
 
