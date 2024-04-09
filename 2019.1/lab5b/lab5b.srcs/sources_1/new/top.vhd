@@ -138,6 +138,8 @@ pure function sine_to_int (
 begin
     return (to_integer(signed(fix_val)) * amplitude) / (2 ** (fix_val'length - 1));
 end function;
+type CalcState is (parts, full);
+signal state : CalcState := parts;
 
 begin
 	trx_clkc : clk_div 
@@ -196,10 +198,11 @@ begin
 	variable x : integer;
 	begin
 		wait until rising_edge(clk_i);
-		if (gen_ready = '1') then
-			write_signal <= not write_signal;
+		if (gen_ready = '1') and state = parts then
 			x := sine_to_int(x_val, 192);
 			y := sine_to_int(y_val, 192);
+		elsif (state = full) then
+            write_signal <= not write_signal;
 			wr_addr <= std_logic_vector(to_unsigned(((x + 192) * 384) + (y + 192), 18));
 		end if;
 	end process;
