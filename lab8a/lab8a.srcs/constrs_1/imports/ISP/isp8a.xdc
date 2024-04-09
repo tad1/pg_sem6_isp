@@ -15,22 +15,6 @@ set_property -dict { PACKAGE_PIN C17   IOSTANDARD LVCMOS33 } [get_ports { btn_i[
 set_property -dict { PACKAGE_PIN D18   IOSTANDARD LVCMOS33 } [get_ports { btn_i[1] }];
 set_property -dict { PACKAGE_PIN E18   IOSTANDARD LVCMOS33 } [get_ports { btn_i[2] }];
 set_property -dict { PACKAGE_PIN G17   IOSTANDARD LVCMOS33 } [get_ports { btn_i[3] }];
-
-#set_property -dict { PACKAGE_PIN H14 IOSTANDARD LVCMOS33 } [get_ports sw_i[0] ]; #virtual SW0
-#set_property -dict { PACKAGE_PIN G16 IOSTANDARD LVCMOS33 } [get_ports sw_i[1] ]; #virtual SW1
-#set_property -dict { PACKAGE_PIN F16 IOSTANDARD LVCMOS33 } [get_ports sw_i[2] ]; #virtual SW2
-#set_property -dict { PACKAGE_PIN D14 IOSTANDARD LVCMOS33 } [get_ports sw_i[3] ]; #virtual SW3
-#set_property -dict { PACKAGE_PIN G18 IOSTANDARD LVCMOS33 } [get_ports sw_i[4] ]; #virtual SW4
-#set_property -dict { PACKAGE_PIN F18 IOSTANDARD LVCMOS33 } [get_ports sw_i[5] ]; #virtual SW5
-#set_property -dict { PACKAGE_PIN E17 IOSTANDARD LVCMOS33 } [get_ports sw_i[6] ]; #virtual SW6
-#set_property -dict { PACKAGE_PIN D17 IOSTANDARD LVCMOS33 } [get_ports sw_i[7] ]; #virtual SW7
-
-#set_property -dict { PACKAGE_PIN C17 IOSTANDARD LVCMOS33 } [get_ports btn_i[0] ]; #virtual BTN0
-#set_property -dict { PACKAGE_PIN D18 IOSTANDARD LVCMOS33 } [get_ports btn_i[1] ]; #virtual BTN1
-#set_property -dict { PACKAGE_PIN E18 IOSTANDARD LVCMOS33 } [get_ports btn_i[2] ]; #virtual BTN2
-#set_property -dict { PACKAGE_PIN G17 IOSTANDARD LVCMOS33 } [get_ports btn_i[3] ]; #virtual BTN3
-
-
 #VGA Connector
 set_property -dict { PACKAGE_PIN A3    IOSTANDARD LVCMOS33 } [get_ports { red_o[0] }]; #IO_L8N_T1_AD14N_35 Sch=vga_r[0]
 set_property -dict { PACKAGE_PIN B4    IOSTANDARD LVCMOS33 } [get_ports { red_o[1] }]; #IO_L7N_T1_AD6N_35 Sch=vga_r[1]
