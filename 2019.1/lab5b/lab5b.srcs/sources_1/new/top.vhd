@@ -192,8 +192,8 @@ begin
 		wait until rising_edge(clk_i);
 		if (gen_ready = '1') then
 			write_signal <= not write_signal;
-			x := conv_integer(x_val(10 downto 0));
-			y := conv_integer(y_val(10 downto 0));
+			x := conv_integer(x_val(10 downto 3));
+			y := conv_integer(y_val(10 downto 3));
 			wr_addr <= CONV_STD_LOGIC_VECTOR(((x + 192) * 384) + (y + 192), 18);
 		end if;
 	end process;
